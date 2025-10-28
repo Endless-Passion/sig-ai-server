@@ -15,7 +15,7 @@ public class SwaggerConfig {
     public OpenAPI baseOpenAPI() {
         return new OpenAPI()
                 .info(new Info()
-                        .title("Cleopatra API")
+                        .title("Sig AI API")
                         .version("v1")
                         .description("Sig AI Swagger 문서"))
                 .servers(List.of(new Server().url("/")));
