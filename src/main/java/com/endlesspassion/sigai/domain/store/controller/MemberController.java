@@ -1,4 +1,4 @@
-package com.endlesspassion.sigai.domain.member.controller;
+package com.endlesspassion.sigai.domain.store.controller;
 
 import com.endlesspassion.sigai.global.exception.ApiResponse;
 import io.swagger.v3.oas.annotations.Operation;
