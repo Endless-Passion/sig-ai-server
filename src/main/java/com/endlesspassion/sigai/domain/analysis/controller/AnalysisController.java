@@ -1,4 +1,4 @@
-package com.endlesspassion.sigai.domain.predict.controller;
+package com.endlesspassion.sigai.domain.analysis.controller;
 
 import com.endlesspassion.sigai.global.exception.ApiResponse;
 import io.swagger.v3.oas.annotations.Operation;
@@ -8,20 +8,17 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
-@Tag(name = "예측 API", description = "소상공인 폐업 예측 관련 API")
+@Tag(name = "분석 API", description = "소상공인 상권 분석 관련 API")
 @RestController
 @RequestMapping("/api/v1")
-public class PredictController {
+public class AnalysisController {
 
     @Operation(
-            summary = "폐업 예측",
+            summary = "상권 분석",
             description = """
-                    가맹점의 상세 정보를 받아 해당 가맹점의 폐업 위험도를 예측합니다.
+                    가맹점의 상세 정보를 받아 해당 가맹점의 상권을 분석합니다.
 
                     **필수 정보:**
                     - 가맹점 기본 정보 (주소, 업종, 개설일 등)
@@ -34,7 +31,7 @@ public class PredictController {
     @ApiResponses(value = {
             @io.swagger.v3.oas.annotations.responses.ApiResponse(
                     responseCode = "200",
-                    description = "예측 성공",
+                    description = "분석 성공",
                     content = @Content(
                             mediaType = "application/json",
                             schema = @Schema(implementation = ApiResponse.class),
@@ -43,8 +40,12 @@ public class PredictController {
                                             {
                                               "status": "success",
                                               "data": {
-                                                "prediction_label": 1,
-                                                "closure_risk_probability": "85.45%"
+                                                "market_score": 75.5,
+                                                "competition_level": "medium",
+                                                "customer_analysis": {
+                                                  "main_age_group": "30-40",
+                                                  "revisit_rate": "65%"
+                                                }
                                               },
                                               "message": null
                                             }
@@ -81,12 +82,12 @@ public class PredictController {
                     )
             )
     })
-    @PostMapping("/predict")
+    @GetMapping("/analysis")
     @SuppressWarnings("unused")
-    public ResponseEntity<ApiResponse<?>> predict(
-            @RequestBody Object request // TODO: PredictRequest DTO로 교체 예정
+    public ResponseEntity<ApiResponse<?>> analysis(
+            @RequestBody Object request // TODO: AnalysisRequest DTO로 교체 예정
     ) {
-        // TODO: 예측 서비스 로직 구현
+        // TODO: 분석 서비스 로직 구현
         return ResponseEntity.ok(ApiResponse.success());
     }
 }

@@ -1,4 +1,4 @@
-package com.endlesspassion.sigai.domain.predict.controller;
+package com.endlesspassion.sigai.domain.member.controller;
 
 import com.endlesspassion.sigai.global.exception.ApiResponse;
 import io.swagger.v3.oas.annotations.Operation;
@@ -13,28 +13,28 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-@Tag(name = "예측 API", description = "소상공인 폐업 예측 관련 API")
-@RestController
-@RequestMapping("/api/v1")
-public class PredictController {
 
+@Tag(name = "가계 정보 입력 API", description = "사장님 가게 정보 입력")
+@RestController
+@RequestMapping("/api/v1/member")
+public class MemberController {
     @Operation(
-            summary = "폐업 예측",
+            summary = "가게 정보 입력",
             description = """
-                    가맹점의 상세 정보를 받아 해당 가맹점의 폐업 위험도를 예측합니다.
+                    가게 정보를 입력받아 저장합니다.
 
                     **필수 정보:**
-                    - 가맹점 기본 정보 (주소, 업종, 개설일 등)
-                    - 고객 연령대별/성별 비중
-                    - 고객 행태 (재방문율, 신규고객율 등)
-                    - 주변 상권 정보 (동일업종 폐업율 등)
-                    - 매출 관련 구간 정보
+                    - 가맹점명
+                    - 가맹점 주소
+                    - 업종
+                    - 개업일
+                    - 사업자 등록 번호
                     """
     )
     @ApiResponses(value = {
             @io.swagger.v3.oas.annotations.responses.ApiResponse(
                     responseCode = "200",
-                    description = "예측 성공",
+                    description = "가게 정보 입력 성공",
                     content = @Content(
                             mediaType = "application/json",
                             schema = @Schema(implementation = ApiResponse.class),
@@ -42,11 +42,8 @@ public class PredictController {
                                     value = """
                                             {
                                               "status": "success",
-                                              "data": {
-                                                "prediction_label": 1,
-                                                "closure_risk_probability": "85.45%"
-                                              },
-                                              "message": null
+                                              "data": null,
+                                              "message": "가게 정보가 성공적으로 저장되었습니다."
                                             }
                                             """
                             )
@@ -63,8 +60,8 @@ public class PredictController {
                                             {
                                               "status": "fail",
                                               "data": {
-                                                "field": "MCT_BSE_AR",
-                                                "message": "가맹점 주소는 필수입니다"
+                                                "field": "storeName",
+                                                "message": "가맹점명은 필수입니다"
                                               },
                                               "message": "잘못된 요청입니다"
                                             }
@@ -81,12 +78,13 @@ public class PredictController {
                     )
             )
     })
-    @PostMapping("/predict")
+    @PostMapping("/store-info")
     @SuppressWarnings("unused")
-    public ResponseEntity<ApiResponse<?>> predict(
-            @RequestBody Object request // TODO: PredictRequest DTO로 교체 예정
+    public ResponseEntity<ApiResponse<?>> registerStoreInfo(
+            @RequestBody Object request // TODO: DTO 생성 후 가게 정보 입력
     ) {
-        // TODO: 예측 서비스 로직 구현
+        // TODO: 가게 정보 입력 로직 구현
         return ResponseEntity.ok(ApiResponse.success());
     }
+
 }
