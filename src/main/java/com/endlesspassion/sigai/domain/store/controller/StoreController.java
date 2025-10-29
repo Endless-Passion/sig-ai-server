@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @Tag(name = "가계 정보 입력 API", description = "사장님 가게 정보 입력")
 @RestController
-@RequestMapping("/api/v1/member")
+@RequestMapping("/api/v1/store")
 public class StoreController {
     @Operation(
             summary = "가게 정보 입력",
