@@ -30,19 +30,10 @@ import java.time.LocalDateTime;
 @EntityListeners(AuditingEntityListener.class)
 public abstract class BaseTimeEntity {
 
-    /**
-     * 생성 시각
-     * - @CreatedDate: 엔티티가 처음 저장될 때 자동으로 시각 기록
-     * - updatable = false: 수정 시에도 값이 변경되지 않음
-     */
     @CreatedDate
     @Column(nullable = false, updatable = false)
     private LocalDateTime createdAt;
 
-    /**
-     * 수정 시각
-     * - @LastModifiedDate: 엔티티가 수정될 때마다 자동으로 시각 갱신
-     */
     @LastModifiedDate
     @Column(nullable = false)
     private LocalDateTime updatedAt;

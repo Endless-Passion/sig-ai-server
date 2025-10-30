@@ -1,5 +1,6 @@
 package com.endlesspassion.sigai.domain.store.entity;
 
+import com.endlesspassion.sigai.global.common.entity.BaseTimeEntity;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -11,7 +12,7 @@ import java.math.BigDecimal;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
 @Table(name = "store_revenue")
-public class StoreRevenue {
+public class StoreRevenue extends BaseTimeEntity {
 
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
