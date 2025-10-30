@@ -8,7 +8,7 @@ import org.springframework.web.reactive.function.client.WebClient;
 @Service
 @RequiredArgsConstructor
 @Slf4j
-public class GetPublicDataService {
+public class PublicDataFetchService {
     private final WebClient webClient;
     /**
      * @param apiKey       호출할 API의 고유 키 (예: "PROFIT_API_KEY")
