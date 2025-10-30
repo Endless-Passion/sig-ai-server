@@ -1,4 +1,4 @@
-package com.endlesspassion.sigai.batch.service;
+package com.endlesspassion.sigai.domain.batch.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
