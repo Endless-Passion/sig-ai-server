@@ -11,7 +11,7 @@ import org.springframework.data.mongodb.core.mapping.Field;
 @CompoundIndex(name = "idx_unique_sales_data",
         def = "{'stdr_yyqu_cd': 1, 'trdar_cd': 1, 'svc_induty_cd': 1}",
         unique = true)
-public class publicProfitData {
+public class PublicProfitData {
 
     @Id
     private String id;
