@@ -1,5 +1,6 @@
 package com.endlesspassion.sigai.domain.store.entity;
 
+import com.endlesspassion.sigai.domain.store.dto.StoreRevenueReq;
 import com.endlesspassion.sigai.global.common.entity.BaseTimeEntity;
 import jakarta.persistence.*;
 import lombok.*;
@@ -43,5 +44,17 @@ public class StoreRevenue extends BaseTimeEntity {
     // 년월 (MM 형식, 예: "202401")
     @Column(name = "month", nullable = false)
     private int month;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "sotre_id", nullable = false)
+    private Store store;
+
+    public void update(StoreRevenueReq req) {
+        this.monthlyRevenue = req.getMonthlyRevenue();
+        this.deliverySalesRatio = req.getDeliverySalesRatio();
+        this.maleCustomer2030Ratio = req.getMaleCustomer2030Ratio();
+        this.maleCustomer40PlusRatio = req.getMaleCustomer40PlusRatio();
+        this.returningCustomerRatio = req.getReturningCustomerRatio();
+    }
 
 }
