@@ -35,4 +35,9 @@ out/
 
 ### VS Code ###
 .vscode/
-*.yml
+application.yml
+application-dev.yml
+docs/
+.env.dev
+.env
+commercialDataTest
