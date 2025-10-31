@@ -21,13 +21,17 @@ import lombok.Getter;
 @Getter
 @Builder
 @AllArgsConstructor(access = AccessLevel.PROTECTED)
-public class MerkeyAnalysisReq {
+public class MarketAnalysisReq {
 
     @NotNull(message = "가게 ID는 필수입니다.")
     private Long storeId; // 가게 ID
 
+    @NotNull(message = "상권 코드는 필수입니다.")
+    private ServiceIndustry serviceArea; // 상권 이름
+
+
     @NotNull(message = "업종 코드는 필수입니다.")
-    private ServiceIndustry serviceIndustry; // 업종 코드
+    private ServiceIndustry serviceIndustry; // 업종 이름
 
     @NotNull(message = "분기는 필수입니다.")
     @Pattern(regexp = "^\\d{4}(0[1-4])$", message = "분기는 YYYYQQ 형식 (예: 202401)")

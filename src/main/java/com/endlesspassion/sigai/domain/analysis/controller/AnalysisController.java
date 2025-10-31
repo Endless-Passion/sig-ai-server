@@ -1,5 +1,7 @@
 package com.endlesspassion.sigai.domain.analysis.controller;
 
+import com.endlesspassion.sigai.domain.analysis.dto.request.MarketAnalysisReq;
+import com.endlesspassion.sigai.domain.analysis.service.MarketAnalysisService;
 import com.endlesspassion.sigai.global.exception.ApiResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -7,13 +9,17 @@ import io.swagger.v3.oas.annotations.media.ExampleObject;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @Tag(name = "분석 API", description = "소상공인 상권 분석 관련 API")
+@RequiredArgsConstructor
 @RestController
 @RequestMapping("/api/v1")
 public class AnalysisController {
+
+    private final MarketAnalysisService marketAnalysisService;
 
     @Operation(
             summary = "상권 분석",
@@ -85,9 +91,10 @@ public class AnalysisController {
     @GetMapping("/analysis")
     @SuppressWarnings("unused")
     public ResponseEntity<ApiResponse<?>> analysis(
-            @RequestBody Object request // TODO: AnalysisRequest DTO로 교체 예정
+            @RequestBody MarketAnalysisReq req
     ) {
-        // TODO: 분석 서비스 로직 구현
+        // 업종, 분기, 상권 정보를 바탕으로 현재 데이터 분석하기
+        marketAnalysisService.analyze(req);
         return ResponseEntity.ok(ApiResponse.success());
     }
 }

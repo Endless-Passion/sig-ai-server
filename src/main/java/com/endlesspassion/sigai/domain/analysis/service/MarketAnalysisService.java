@@ -1,5 +1,7 @@
 package com.endlesspassion.sigai.domain.analysis.service;
 
+import com.endlesspassion.sigai.domain.analysis.dto.request.MarketAnalysisReq;
+import com.endlesspassion.sigai.domain.analysis.dto.response.MarketAnalysisRes;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -27,20 +29,63 @@ public class MarketAnalysisService {
     private final PopulationComparisonService populationComparisonService; // 이건 구현 안할 예정. 껍데기만 남기고, DTO도 빈 껍데기로만 제공 예정!, 프론트에서 알아서 가짜 데이터로 처리
     private final ClosedComparisonService closedComparisonService;
 
-    // 공공 데이터로부터 다음 정보 가져오기
-    // 매출 비교 그래프(8분기 동안 우리 가게의 매출은 동일 상권, 동일 업종의 상위 몇%인지 순위 추세)
-    // 인구(8분기 동안 유동/거주/직장 인구)의 실시간 데이터 변화 추세(이건 시간상 못함 나중에 할 예정!, 지금 구현안하고 껍데기만)
-    // 8분기 동안 동일 업종, 동일 상권의 폐업률 데이터 추세 데이터
-    //경쟁강도 = 동일업종 점포수 / 상권 면적(면적 미존재 시 점포수 지표만)
-    private void analysis() {
-        // 컨트롤러로부터 받기
-        List<String> quarters = null;
-        String trdarCd = "empty";
-        String svcIndutyCd = "empty";
-        BigDecimal revenue = null;
-        // 아래 서비스에서 데이터를 불러와서 맞게 DTO로 구성!
-        revenueComparisonService.alalyze(quarters, trdarCd, svcIndutyCd, revenue);
-        populationComparisonService.alalysis(); // 위에서 말했듯이 이건 안함!
-        closedComparisonService.analyze(quarters, trdarCd, svcIndutyCd);
+    /**
+     * Req에서 받는 값들: 가게 정보(매출, 상권, 업종, 분석할 분기)
+     * 사장님 정보를 상권 정보와 비교하여 매출, 인구, 폐업 데이터 분석하기
+     * revenueComparisonService: 공공 데이터의 해당 분기들의 매출 통계 정보
+     * populationComparisonService: 공공 데이터의 해당 분기들의 인구 통계 정보(나중에 할 예정)
+     * closedComparisonService: 공공 데이터의 해당 분기들의 폐업 통계 정보
+     * 경쟁강도 = 동일업종 점포수 / 상권 면적(면적 미존재 시 점포수 지표만)(시간 되면)
+     *
+     * @return 사장님 가게 정보와 동일 상권/동일 업종의 공공 데이터를 비교한 결과
+     */
+    public MarketAnalysisRes analyze(MarketAnalysisReq req) {
+        List<String> quarters = getQuarters(req.getQuarter(), req.getCount());
+        String trdarCd = req.getServiceArea().getCode(); // 상권 이름 -> 상권 코드
+        String svcIndutyCd = req.getServiceIndustry().getCode(); // 업종 이름 -> 업종 코드
+        BigDecimal revenue = null; // 사장님 가게로부터 이번 count 분기만큼 분기별 수익 가져오기!
+        return MarketAnalysisRes.of(
+                req.getStoreId(),
+                "storeName",
+                revenueComparisonService.alalyze(quarters, trdarCd, svcIndutyCd, revenue),
+                populationComparisonService.alalysis(),
+                closedComparisonService.analyze(quarters, trdarCd, svcIndutyCd)
+        );
+
+    }
+
+    // Utils
+    /**
+     * 현재 분기로부터 과거 분기들을 계산하여 리스트로 반환
+     *
+     * @param quarter 시작 분기 (YYYYQQ 형식, 예: 202401)
+     * @param count 반환할 분기 개수
+     * @return 현재 분기를 포함한 과거 분기들의 리스트 (최신 순서)
+     *
+     * 예시:
+     * - 입력: quarter = "202401", count = 8
+     * - 출력: ["202401", "202304", "202303", "202302", "202301", "202204", "202203", "202202"]
+     */
+    private List<String> getQuarters(String quarter, int count) {
+        java.util.List<String> quarters = new java.util.ArrayList<>();
+
+        // 년도와 분기 추출
+        int year = Integer.parseInt(quarter.substring(0, 4));
+        int quarterNum = Integer.parseInt(quarter.substring(4, 6));
+
+        // count만큼 분기를 역순으로 계산
+        for (int i = 0; i < count; i++) {
+            // 현재 분기를 리스트에 추가 (YYYYQQ 형식)
+            quarters.add(String.format("%04d%02d", year, quarterNum));
+
+            // 이전 분기로 이동
+            quarterNum--;
+            if (quarterNum < 1) {
+                quarterNum = 4;
+                year--;
+            }
+        }
+
+        return quarters;
     }
 }
