@@ -1,6 +1,6 @@
 package com.endlesspassion.sigai.batch.writer;
 
-import com.endlesspassion.sigai.batch.domain.PublicStoreData;
+import com.endlesspassion.sigai.domain.publicdata.document.PublicStoreData;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;

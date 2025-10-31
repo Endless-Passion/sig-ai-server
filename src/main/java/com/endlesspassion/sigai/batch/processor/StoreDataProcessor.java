@@ -1,6 +1,6 @@
 package com.endlesspassion.sigai.batch.processor;
 
-import com.endlesspassion.sigai.batch.domain.PublicStoreData;
+import com.endlesspassion.sigai.domain.publicdata.document.PublicStoreData;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;

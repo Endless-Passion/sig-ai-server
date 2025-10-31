@@ -1,7 +1,7 @@
 package com.endlesspassion.sigai.batch.config;
 
-import com.endlesspassion.sigai.batch.domain.PublicStoreData;
-import com.endlesspassion.sigai.batch.domain.publicProfitData;
+import com.endlesspassion.sigai.domain.publicdata.document.PublicStoreData;
+import com.endlesspassion.sigai.domain.publicdata.document.PublicProfitData;
 import com.endlesspassion.sigai.batch.processor.ProfitDataProcessor;
 import com.endlesspassion.sigai.batch.processor.StoreDataProcessor;
 import com.endlesspassion.sigai.batch.reader.ProfitDataReader;
@@ -50,7 +50,7 @@ public class PublicDataSyncJobConfig {
     @Bean
     public Step profitDataSyncStep() {
         return new StepBuilder("profitDataSyncStep", jobRepository)
-                .<String, List<publicProfitData>>chunk(1, transactionManager)
+                .<String, List<PublicProfitData>>chunk(1, transactionManager)
                 .reader(profitDataReader)
                 .processor(profitDataProcessor)
                 .writer(profitDataWriter)

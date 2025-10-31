@@ -1,6 +1,6 @@
 package com.endlesspassion.sigai.batch.writer;
 
-import com.endlesspassion.sigai.batch.domain.publicProfitData;
+import com.endlesspassion.sigai.domain.publicdata.document.PublicProfitData;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
 
 @Slf4j
 @Component
-public class ProfitDataWriter extends AbstractPublicDataWriter<publicProfitData> {
+public class ProfitDataWriter extends AbstractPublicDataWriter<PublicProfitData> {
 
     public ProfitDataWriter(MongoTemplate mongoTemplate) {
         super(mongoTemplate);
@@ -22,12 +22,12 @@ public class ProfitDataWriter extends AbstractPublicDataWriter<publicProfitData>
     }
 
     @Override
-    protected Class<publicProfitData> getEntityClass() {
-        return publicProfitData.class;
+    protected Class<PublicProfitData> getEntityClass() {
+        return PublicProfitData.class;
     }
 
     @Override
-    protected Query buildUniqueQuery(publicProfitData entity) {
+    protected Query buildUniqueQuery(PublicProfitData entity) {
         return new Query(
             Criteria.where("stdr_yyqu_cd").is(entity.getStdrYyquCd())
                     .and("trdar_cd").is(entity.getTrdarCd())
@@ -36,7 +36,7 @@ public class ProfitDataWriter extends AbstractPublicDataWriter<publicProfitData>
     }
 
     @Override
-    protected Update buildUpdate(publicProfitData entity) {
+    protected Update buildUpdate(PublicProfitData entity) {
         Update update = new Update();
 
         update.set("stdr_yyqu_cd", entity.getStdrYyquCd());

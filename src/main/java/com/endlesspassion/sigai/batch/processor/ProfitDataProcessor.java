@@ -1,6 +1,6 @@
 package com.endlesspassion.sigai.batch.processor;
 
-import com.endlesspassion.sigai.batch.domain.publicProfitData;
+import com.endlesspassion.sigai.domain.publicdata.document.PublicProfitData;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
 
 @Slf4j
 @Component
-public class ProfitDataProcessor extends AbstractPublicDataProcessor<publicProfitData> {
+public class ProfitDataProcessor extends AbstractPublicDataProcessor<PublicProfitData> {
 
     @Value("${seoul.api.sales-service}")
     private String serviceName;
@@ -24,8 +24,8 @@ public class ProfitDataProcessor extends AbstractPublicDataProcessor<publicProfi
     }
 
     @Override
-    protected publicProfitData parseRowToEntity(JsonNode rowNode) throws Exception {
-        publicProfitData data = new publicProfitData();
+    protected PublicProfitData parseRowToEntity(JsonNode rowNode) throws Exception {
+        PublicProfitData data = new PublicProfitData();
 
         data.setStdrYyquCd(getTextValue(rowNode, "STDR_YYQU_CD"));
         data.setTrdarSeCd(getTextValue(rowNode, "TRDAR_SE_CD"));
