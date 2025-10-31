@@ -1,6 +1,6 @@
 package com.endlesspassion.sigai.domain.store.controller;
 
-import com.endlesspassion.sigai.domain.store.dto.StoreReq;
+import com.endlesspassion.sigai.domain.store.dto.request.StoreReq;
 import com.endlesspassion.sigai.global.exception.ApiResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;

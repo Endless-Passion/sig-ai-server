@@ -2,6 +2,9 @@ package com.endlesspassion.sigai.domain.analysis.service;
 
 import com.endlesspassion.sigai.domain.analysis.dto.request.MarketAnalysisReq;
 import com.endlesspassion.sigai.domain.analysis.dto.response.MarketAnalysisRes;
+import com.endlesspassion.sigai.domain.store.StoreService;
+import com.endlesspassion.sigai.domain.store.entity.Store;
+import com.endlesspassion.sigai.domain.store.repository.StoreRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -24,7 +27,7 @@ import java.util.List;
 @Service
 public class MarketAnalysisService {
 
-    // private final StoreService storeService;
+    private final StoreRepository storeRepository;
     private final RevenueComparisonService revenueComparisonService;
     private final PopulationComparisonService populationComparisonService; // 이건 구현 안할 예정. 껍데기만 남기고, DTO도 빈 껍데기로만 제공 예정!, 프론트에서 알아서 가짜 데이터로 처리
     private final ClosedComparisonService closedComparisonService;
@@ -40,18 +43,23 @@ public class MarketAnalysisService {
      * @return 사장님 가게 정보와 동일 상권/동일 업종의 공공 데이터를 비교한 결과
      */
     public MarketAnalysisRes analyze(MarketAnalysisReq req) {
-        List<String> quarters = getQuarters(req.getQuarter(), req.getCount());
-        String trdarCd = req.getServiceArea().getCode(); // 상권 이름 -> 상권 코드
-        String svcIndutyCd = req.getServiceIndustry().getCode(); // 업종 이름 -> 업종 코드
+
+        Store store = storeRepository.findById(req.getStoreId())
+                .orElseThrow(() -> new IllegalArgumentException("해당 가게를 찾을 수 없습니다. ID: " + req.getStoreId()));
+
+        String trdarCd = store.getServiceArea().getCode(); // 상권 이름 -> 상권 코드
+        String svcIndutyCd = store.getServiceIndustry().getCode(); // 업종 이름 -> 업종 코드
         BigDecimal revenue = null; // 사장님 가게로부터 이번 count 분기만큼 분기별 수익 가져오기!
+
+        List<String> quarters = getQuarters(req.getQuarter(), req.getCount());
+
         return MarketAnalysisRes.of(
                 req.getStoreId(),
-                "storeName",
+                store.getStoreName(),
                 revenueComparisonService.alalyze(quarters, trdarCd, svcIndutyCd, revenue),
                 populationComparisonService.alalysis(),
                 closedComparisonService.analyze(quarters, trdarCd, svcIndutyCd)
         );
-
     }
 
     // Utils

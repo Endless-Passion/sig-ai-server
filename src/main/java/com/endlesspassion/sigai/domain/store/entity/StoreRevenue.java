@@ -1,6 +1,6 @@
 package com.endlesspassion.sigai.domain.store.entity;
 
-import com.endlesspassion.sigai.domain.store.dto.StoreRevenueReq;
+import com.endlesspassion.sigai.domain.store.dto.request.StoreRevenueReq;
 import com.endlesspassion.sigai.global.common.entity.BaseTimeEntity;
 import jakarta.persistence.*;
 import lombok.*;
