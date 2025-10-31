@@ -2,8 +2,6 @@ package com.endlesspassion.sigai.global.common.enums;
 
 import lombok.Getter;
 
-import java.util.Optional;
-
 @Getter
 public enum ServiceIndustry {
 

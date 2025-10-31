@@ -36,7 +36,4 @@ public class StoreService {
     public void delete(StoreReq req) {
         storeRepository.deleteById(req.getStoreId());
     }
-
-
-
 }
