@@ -1,14 +1,13 @@
 package com.endlesspassion.sigai.batch.domain;
 
-import jakarta.persistence.Id;
 import lombok.Data;
+import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.CompoundIndex;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 
 @Document(collection = "public_data_store") // "점포" 데이터를 위한 별도 컬렉션
 @Data
-// '매출' 데이터와 동일한 키로 인덱스를 생성 (나중에 조인/매칭하기 위함)
 @CompoundIndex(name = "idx_unique_store_data",
         def = "{'stdr_yyqu_cd': 1, 'trdar_cd': 1, 'svc_induty_cd': 1}",
         unique = true)
@@ -39,9 +38,6 @@ public class PublicStoreData {
 
     @Field("svc_induty_cd_nm")
     private String svcIndutyCdNm; // 서비스_업종_코드_명
-
-    // --- 2. 점포 고유 필드 (7개) ---
-    // (API 응답이 .0으로 끝나는 숫자가 많으므로 Double이 안전합니다)
 
     @Field("stor_co")
     private Double storCo; // 점포_수

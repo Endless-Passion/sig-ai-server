@@ -41,3 +41,4 @@ docs/
 .env.dev
 .env
 commercialDataTest
+src/test/java/com/endlesspassion/sigai/batch/

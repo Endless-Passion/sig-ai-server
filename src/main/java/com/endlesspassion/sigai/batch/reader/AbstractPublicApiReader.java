@@ -47,6 +47,13 @@ public abstract class AbstractPublicApiReader implements ItemReader<String> {
                 throw new RuntimeException("list_total_count가 0이거나 존재하지 않습니다.");
             }
 
+            // 테스트 모드: 10개만 가져오기
+            String testMode = System.getProperty("batch.test.mode", "false");
+            if ("true".equalsIgnoreCase(testMode)) {
+                this.totalCount = Math.min(this.totalCount, 10);
+                log.info("===== ({}) 테스트 모드: 데이터 10개로 제한 =====", this.serviceName);
+            }
+
             this.totalPages = (int) Math.ceil((double) this.totalCount / PAGE_SIZE);
             log.info("===== ({}) 총 개수: {}, 총 페이지: {} =====", this.serviceName, totalCount, totalPages);
 
@@ -78,7 +85,6 @@ public abstract class AbstractPublicApiReader implements ItemReader<String> {
             return enrichedJson;
 
         } catch (Exception e) {
-            // 실패한 페이지는 건너뛰고, 다음 페이지를 바로 시도
             currentPage++;
             return read();
         }

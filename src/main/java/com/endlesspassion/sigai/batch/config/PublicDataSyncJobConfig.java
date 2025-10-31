@@ -1,8 +1,13 @@
 package com.endlesspassion.sigai.batch.config;
-import com.endlesspassion.sigai.batch.domain.PublicStoreData; // '점포' 엔티티
-import com.endlesspassion.sigai.batch.processor.StoreDataProcessor; // '점포' 프로세서
-import com.endlesspassion.sigai.batch.reader.StoreDataReader; // '점포' 리더
-import com.endlesspassion.sigai.batch.writer.StoreDataWriter; // '점포' 라이터
+
+import com.endlesspassion.sigai.batch.domain.PublicStoreData;
+import com.endlesspassion.sigai.batch.domain.publicProfitData;
+import com.endlesspassion.sigai.batch.processor.ProfitDataProcessor;
+import com.endlesspassion.sigai.batch.processor.StoreDataProcessor;
+import com.endlesspassion.sigai.batch.reader.ProfitDataReader;
+import com.endlesspassion.sigai.batch.reader.StoreDataReader;
+import com.endlesspassion.sigai.batch.writer.ProfitDataWriter;
+import com.endlesspassion.sigai.batch.writer.StoreDataWriter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.batch.core.Job;
@@ -13,17 +18,46 @@ import org.springframework.batch.core.step.builder.StepBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.transaction.PlatformTransactionManager;
+
 import java.util.List;
 
 @Slf4j
 @Configuration
 @RequiredArgsConstructor
-public class StoreDataSyncJobConfig {
+public class PublicDataSyncJobConfig {
+
     private final JobRepository jobRepository;
     private final PlatformTransactionManager transactionManager;
+
+    private final ProfitDataReader profitDataReader;
     private final StoreDataReader storeDataReader;
+
+    private final ProfitDataProcessor profitDataProcessor;
     private final StoreDataProcessor storeDataProcessor;
+
+    private final ProfitDataWriter profitDataWriter;
     private final StoreDataWriter storeDataWriter;
+
+    // ========== 매출 데이터 동기화 작업 ==========
+
+    @Bean
+    public Job profitDataSyncJob() {
+        return new JobBuilder("profitDataSyncJob", jobRepository)
+                .start(profitDataSyncStep())
+                .build();
+    }
+
+    @Bean
+    public Step profitDataSyncStep() {
+        return new StepBuilder("profitDataSyncStep", jobRepository)
+                .<String, List<publicProfitData>>chunk(1, transactionManager)
+                .reader(profitDataReader)
+                .processor(profitDataProcessor)
+                .writer(profitDataWriter)
+                .build();
+    }
+
+    // ========== 점포 데이터 동기화 작업 ==========
 
     @Bean
     public Job storeDataSyncJob() {

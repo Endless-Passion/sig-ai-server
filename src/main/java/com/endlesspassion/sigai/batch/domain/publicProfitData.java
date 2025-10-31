@@ -16,9 +16,8 @@ public class publicProfitData {
     @Id
     private String id;
 
-    // --- 상권 및 업종 정보 (String) ---
     @Field("stdr_yyqu_cd")
-    private String stdrYyquCd; // 기준_년분기_코드
+    private String stdrYyquCd;
 
     @Field("trdar_se_cd")
     private String trdarSeCd; // 상권_구분_코드
