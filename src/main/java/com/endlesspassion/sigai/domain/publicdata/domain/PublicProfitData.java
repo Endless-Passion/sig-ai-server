@@ -1,4 +1,4 @@
-package com.endlesspassion.sigai.batch.domain;
+package com.endlesspassion.sigai.domain.publicdata.domain;
 
 import lombok.Data;
 import org.springframework.data.annotation.Id;

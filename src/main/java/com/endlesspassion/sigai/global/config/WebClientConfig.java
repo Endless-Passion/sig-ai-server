@@ -1,4 +1,4 @@
-package com.endlesspassion.sigai.config;
+package com.endlesspassion.sigai.global.config;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
