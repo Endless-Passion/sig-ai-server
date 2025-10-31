@@ -28,7 +28,7 @@ public class StoreRes {
 
     private Boolean isFranchise;
 
-    public static StoreRes of(Store store) {
+    public static StoreRes from(Store store) {
         return StoreRes.builder()
                 .id(store.getId())
                 .storeName(store.getStoreName())

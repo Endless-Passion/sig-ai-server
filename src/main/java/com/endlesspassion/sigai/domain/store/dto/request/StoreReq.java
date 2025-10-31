@@ -13,6 +13,9 @@ import java.time.LocalDate;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class StoreReq {
 
+    @NotBlank(message = "가게 Id는 필수.")
+    private Long storeId;
+
     @NotBlank(message = "가게 이름은 필수입니다.")
     @Size(max = 100, message = "가게 이름은 100자 이내로 입력해주세요.")
     private String storeName;
