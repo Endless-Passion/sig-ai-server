@@ -1,4 +1,4 @@
-package com.endlesspassion.sigai.batch.writer;
+package com.endlesspassion.sigai.domain.batch.writer;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

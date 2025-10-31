@@ -1,6 +1,6 @@
-package com.endlesspassion.sigai.batch.reader;
+package com.endlesspassion.sigai.domain.batch.reader;
 
-import com.endlesspassion.sigai.batch.service.GetPublicDataService;
+import com.endlesspassion.sigai.domain.batch.service.GetPublicDataService;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;

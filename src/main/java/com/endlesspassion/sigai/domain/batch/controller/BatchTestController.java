@@ -1,4 +1,4 @@
-package com.endlesspassion.sigai.batch.controller;
+package com.endlesspassion.sigai.domain.batch.controller;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.batch.core.Job;

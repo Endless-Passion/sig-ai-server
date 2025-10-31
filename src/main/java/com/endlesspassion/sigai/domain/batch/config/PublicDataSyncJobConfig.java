@@ -1,13 +1,13 @@
-package com.endlesspassion.sigai.batch.config;
+package com.endlesspassion.sigai.domain.batch.config;
 
 import com.endlesspassion.sigai.domain.publicdata.document.PublicStoreData;
 import com.endlesspassion.sigai.domain.publicdata.document.PublicProfitData;
-import com.endlesspassion.sigai.batch.processor.ProfitDataProcessor;
-import com.endlesspassion.sigai.batch.processor.StoreDataProcessor;
-import com.endlesspassion.sigai.batch.reader.ProfitDataReader;
-import com.endlesspassion.sigai.batch.reader.StoreDataReader;
-import com.endlesspassion.sigai.batch.writer.ProfitDataWriter;
-import com.endlesspassion.sigai.batch.writer.StoreDataWriter;
+import com.endlesspassion.sigai.domain.batch.processor.ProfitDataProcessor;
+import com.endlesspassion.sigai.domain.batch.processor.StoreDataProcessor;
+import com.endlesspassion.sigai.domain.batch.reader.ProfitDataReader;
+import com.endlesspassion.sigai.domain.batch.reader.StoreDataReader;
+import com.endlesspassion.sigai.domain.batch.writer.ProfitDataWriter;
+import com.endlesspassion.sigai.domain.batch.writer.StoreDataWriter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.batch.core.Job;

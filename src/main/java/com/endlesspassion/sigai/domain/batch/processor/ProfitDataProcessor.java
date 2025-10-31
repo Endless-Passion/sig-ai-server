@@ -1,4 +1,4 @@
-package com.endlesspassion.sigai.batch.processor;
+package com.endlesspassion.sigai.domain.batch.processor;
 
 import com.endlesspassion.sigai.domain.publicdata.document.PublicProfitData;
 import com.fasterxml.jackson.databind.JsonNode;

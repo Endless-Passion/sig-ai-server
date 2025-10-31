@@ -1,4 +1,4 @@
-package com.endlesspassion.sigai.domain.batch;
+package com.endlesspassion.sigai.domain.batch.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -8,15 +8,9 @@ import org.springframework.web.reactive.function.client.WebClient;
 @Service
 @RequiredArgsConstructor
 @Slf4j
-public class PublicDataFetchService {
+public class GetPublicDataService {
     private final WebClient webClient;
-    /**
-     * @param apiKey       호출할 API의 고유 키 (예: "PROFIT_API_KEY")
-     * @param serviceName  호출할 서비스명 (예: "VwsmTrdhlSelngQq")
-     * @param startIndex   시작 인덱스
-     * @param endIndex     종료 인덱스
-     * @return API 응답 (JSON String)
-     */
+
     public String fetchData(String apiKey, String serviceName, int startIndex, int endIndex) {
 
         String uri = String.format("/%s/json/%s/%d/%d/",
