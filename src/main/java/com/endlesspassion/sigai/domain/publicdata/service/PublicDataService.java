@@ -1,5 +1,7 @@
 package com.endlesspassion.sigai.domain.publicdata.service;
 
+import com.endlesspassion.sigai.domain.publicdata.document.PublicProfitData;
+import com.endlesspassion.sigai.domain.publicdata.document.PublicStoreData;
 import com.endlesspassion.sigai.domain.publicdata.repository.PublicProfitDataRepository;
 import com.endlesspassion.sigai.domain.publicdata.repository.PublicStoreDataRepository;
 import lombok.RequiredArgsConstructor;

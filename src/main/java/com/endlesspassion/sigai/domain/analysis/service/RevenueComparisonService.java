@@ -1,6 +1,8 @@
 package com.endlesspassion.sigai.domain.analysis.service;
 
 import com.endlesspassion.sigai.domain.analysis.dto.response.RevenueComparison;
+import com.endlesspassion.sigai.domain.publicdata.document.PublicProfitData;
+import com.endlesspassion.sigai.domain.publicdata.document.PublicStoreData;
 import com.endlesspassion.sigai.domain.publicdata.service.PublicDataService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
