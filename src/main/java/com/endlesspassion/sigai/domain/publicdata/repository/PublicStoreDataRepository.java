@@ -1,6 +1,6 @@
 package com.endlesspassion.sigai.domain.publicdata.repository;
 
-import com.endlesspassion.sigai.domain.publicdata.domain.PublicStoreData;
+import com.endlesspassion.sigai.domain.publicdata.document.PublicStoreData;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.stereotype.Repository;
 
