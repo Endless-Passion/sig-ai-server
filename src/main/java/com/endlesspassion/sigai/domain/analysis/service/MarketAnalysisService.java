@@ -4,6 +4,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
+import java.util.List;
+
 /**
  * 상권 분석 통합 서비스 (Facade)
  *
@@ -30,10 +33,14 @@ public class MarketAnalysisService {
     // 8분기 동안 동일 업종, 동일 상권의 폐업률 데이터 추세 데이터
     //경쟁강도 = 동일업종 점포수 / 상권 면적(면적 미존재 시 점포수 지표만)
     private void analysis() {
+        // 컨트롤러로부터 받기
+        List<String> quarters = null;
+        String trdarCd = "empty";
+        String svcIndutyCd = "empty";
+        BigDecimal revenue = null;
         // 아래 서비스에서 데이터를 불러와서 맞게 DTO로 구성!
-        revenueComparisonService.alalysis();
+        revenueComparisonService.alalyze(quarters, trdarCd, svcIndutyCd, revenue);
         populationComparisonService.alalysis(); // 위에서 말했듯이 이건 안함!
-        closedComparisonService.alalysis();
+        closedComparisonService.analyze(quarters, trdarCd, svcIndutyCd);
     }
-
 }
