@@ -1,4 +1,4 @@
-package com.endlesspassion.sigai.domain.store.dto;
+package com.endlesspassion.sigai.domain.store.dto.request;
 
 import com.endlesspassion.sigai.domain.store.entity.StoreRevenue;
 import jakarta.validation.constraints.DecimalMax;

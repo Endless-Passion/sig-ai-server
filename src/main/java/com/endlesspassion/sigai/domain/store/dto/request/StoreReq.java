@@ -1,4 +1,4 @@
-package com.endlesspassion.sigai.domain.store.dto;
+package com.endlesspassion.sigai.domain.store.dto.request;
 
 import com.endlesspassion.sigai.domain.store.entity.Store;
 import com.endlesspassion.sigai.global.common.enums.ServiceIndustry;
@@ -36,7 +36,7 @@ public class StoreReq {
     @Max(value = 1, message = "브랜드 코드는 0 또는 1이어야 합니다.")
     private Integer brandCode;  // 1: 프랜차이즈, 0: 일반
 
-    public boolean isFranchise() {
+    public Boolean isFranchise() {
         return brandCode != null && brandCode == 1;
     }
 
