@@ -1,4 +1,4 @@
-package com.endlesspassion.sigai.domain.batch.domain;
+package com.endlesspassion.sigai.domain.publicdata.domain;
 
 import jakarta.persistence.Id;
 import lombok.Data;
