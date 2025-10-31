@@ -15,9 +15,9 @@ public class StoreService {
 
     private final StoreRepository storeRepository;
 
-    public StoreRes get(StoreReq req) {
-        Store store = storeRepository.findById(req.getStoreId())
-                .orElseThrow(() -> new IllegalArgumentException("해당 가게를 찾을 수 없습니다. ID: " + req.getStoreId()));
+    public StoreRes get(Long storeId) {
+        Store store = storeRepository.findById(storeId)
+                .orElseThrow(() -> new IllegalArgumentException("해당 가게를 찾을 수 없습니다. ID: " + storeId));
         return StoreRes.from(store);
     }
 
