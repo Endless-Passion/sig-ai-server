@@ -2,7 +2,7 @@ services:
   mongo:
     image: mongo:7.0
     container_name: sigai-mongo
-    env_file: [.env.dev] # ◀◀ .env.dev 파일 로드
+    env_file: [.env]
     ports: ["27017:27017"]
     volumes:
       - mongo_data:/data/db # 데이터 저장용
@@ -16,7 +16,7 @@ services:
   mysql:
     image: mysql:8.0
     container_name: sigai-mysql
-    env_file: [.env.dev] # ◀◀ .env.dev 파일 로드
+    env_file: [.env]
     ports:
       - "3307:3306" # 포트는 3307 사용
     volumes:
