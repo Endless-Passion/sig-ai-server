@@ -12,7 +12,7 @@ import java.util.List;
 public class RevenueComparison {
 
     private List<QuarterlyRevenueRank> quarterlyRevenueRanks;
-    private Double competitionIntensity;
+    private Double competitionIntensity; // 최근 분기의 경쟁 강도[동일업종 점포수 / 상권 면적(면적 미존재 시 점포수 지표만)]
 
     public static RevenueComparison of(
             List<QuarterlyRevenueRank> quarterlyRevenueRanks,
