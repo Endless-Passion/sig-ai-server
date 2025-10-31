@@ -38,11 +38,11 @@ public class StoreRevenue extends BaseTimeEntity {
     private Float returningCustomerRatio;
 
     // 년월 (YYYY형식, 예: "2024")
-    @Column(name = "year", nullable = false)
+    @Column(name = "reveunue_year", nullable = false)
     private int year;
 
     // 년월 (MM 형식, 예: "202401")
-    @Column(name = "month", nullable = false)
+    @Column(name = "revenue_month", nullable = false)
     private int month;
 
     @ManyToOne(fetch = FetchType.LAZY)
