@@ -12,6 +12,16 @@ import java.util.List;
 public class RevenueComparison {
 
     private List<QuarterlyRevenueRank> quarterlyRevenueRanks;
+    private Double competitionIntensity;
+
+    public static RevenueComparison of(
+            List<QuarterlyRevenueRank> quarterlyRevenueRanks,
+            Double competitionIntensity) {
+        return RevenueComparison.builder()
+                .quarterlyRevenueRanks(quarterlyRevenueRanks)
+                .competitionIntensity(competitionIntensity)
+                .build();
+    }
 
     @Getter
     @Builder
@@ -19,9 +29,41 @@ public class RevenueComparison {
     public static class QuarterlyRevenueRank {
         private String quarter; // 분기 코드 (예: "202401" = 2024년 1분기)
         private BigDecimal revenue; // 사용자 매장의 매출액
-        private Double toPercentile; // 동일 상권, 동일 업종 내 상위 퍼센트
+        private Double topPercentile; // 동일 상권, 동일 업종 내 상위 퍼센트
         private Integer totalStoreCount;  // 전체 매장 수
         private Integer rank; // 순위
         private Integer rankChange; // 전 분기 대비 변화
+
+        public static QuarterlyRevenueRank of(
+                String quarter,
+                BigDecimal revenue,
+                Double topPercentile,
+                Integer totalStoreCount,
+                Integer rank,
+                Integer rankChange) {
+            return QuarterlyRevenueRank.builder()
+                    .quarter(quarter)
+                    .revenue(revenue)
+                    .topPercentile(topPercentile)
+                    .totalStoreCount(totalStoreCount)
+                    .rank(rank)
+                    .rankChange(rankChange)
+                    .build();
+        }
+
+
+        // 데이터가 없을 때 빈 객체 생성
+        public static QuarterlyRevenueRank empty(
+                String quarter,
+                BigDecimal revenue) {
+            return QuarterlyRevenueRank.builder()
+                    .quarter(quarter)
+                    .revenue(revenue)
+                    .topPercentile(null)
+                    .totalStoreCount(0)
+                    .rank(null)
+                    .rankChange(null)
+                    .build();
+        }
     }
 }
