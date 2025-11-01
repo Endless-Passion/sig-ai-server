@@ -88,7 +88,7 @@ public class PublicDataService {
      * @param quarters 분기 코드 리스트
      * @param trdarCd 상권 코드
      * @param svcIndutyCd 업종 코드
-     * @return 매출 데이터 리스트 (분기 내림차순 정렬)
+     * @return 매출 데이터 리스트 (분기 오름차순 정렬: 과거 → 최신)
      */
     public List<PublicProfitData> findProfitDataByQuarters(
             List<String> quarters, String trdarCd, String svcIndutyCd) {
@@ -97,7 +97,7 @@ public class PublicDataService {
         query.addCriteria(Criteria.where("stdrYyquCd").in(quarters));
         query.addCriteria(Criteria.where("trdarCd").is(trdarCd));
         query.addCriteria(Criteria.where("svcIndutyCd").is(svcIndutyCd));
-        query.with(Sort.by(Sort.Direction.DESC, "stdrYyquCd")); // 최근 분기 우선
+        query.with(Sort.by(Sort.Direction.ASC, "stdrYyquCd")); // 과거 분기부터
 
         return mongoTemplate.find(query, PublicProfitData.class);
     }
@@ -108,7 +108,7 @@ public class PublicDataService {
      * @param quarters 분기 코드 리스트
      * @param trdarCd 상권 코드
      * @param svcIndutyCd 업종 코드
-     * @return 점포 데이터 리스트 (분기 내림차순 정렬)
+     * @return 점포 데이터 리스트 (분기 오름차순 정렬: 과거 → 최신)
      */
     public List<PublicStoreData> findStoreDataByQuarters(
             List<String> quarters, String trdarCd, String svcIndutyCd) {
@@ -117,7 +117,7 @@ public class PublicDataService {
         query.addCriteria(Criteria.where("stdrYyquCd").in(quarters));
         query.addCriteria(Criteria.where("trdarCd").is(trdarCd));
         query.addCriteria(Criteria.where("svcIndutyCd").is(svcIndutyCd));
-        query.with(Sort.by(Sort.Direction.DESC, "stdrYyquCd")); // 최근 분기 우선
+        query.with(Sort.by(Sort.Direction.ASC, "stdrYyquCd")); // 과거 분기부터
 
         return mongoTemplate.find(query, PublicStoreData.class);
     }

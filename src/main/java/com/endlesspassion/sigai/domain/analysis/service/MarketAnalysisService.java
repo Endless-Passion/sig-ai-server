@@ -73,15 +73,15 @@ public class MarketAnalysisService {
 
     // Utils
     /**
-     * 현재 분기로부터 과거 분기들을 계산하여 리스트로 반환
+     * 현재 분기로부터 과거 분기들을 계산하여 리스트로 반환 (오름차순)
      *
      * @param quarter 시작 분기 (YYYYQQ 형식, 예: 202401)
      * @param count 반환할 분기 개수
-     * @return 현재 분기를 포함한 과거 분기들의 리스트 (최신 순서)
+     * @return 과거 분기부터 현재 분기까지의 리스트 (오름차순: 과거 → 최신)
      *
      * 예시:
      * - 입력: quarter = "202401", count = 8
-     * - 출력: ["202401", "202304", "202303", "202302", "202301", "202204", "202203", "202202"]
+     * - 출력: ["202202", "202203", "202204", "202301", "202302", "202303", "202304", "202401"]
      */
     private List<String> getQuarters(String quarter, int count) {
         java.util.List<String> quarters = new java.util.ArrayList<>();
@@ -90,16 +90,24 @@ public class MarketAnalysisService {
         int year = Integer.parseInt(quarter.substring(0, 4));
         int quarterNum = Integer.parseInt(quarter.substring(4, 6));
 
-        // count만큼 분기를 역순으로 계산
-        for (int i = 0; i < count; i++) {
-            // 현재 분기를 리스트에 추가 (YYYYQQ 형식)
-            quarters.add(String.format("%04d%02d", year, quarterNum));
-
-            // 이전 분기로 이동
+        // 시작 분기 계산 (count-1 분기 이전으로 이동)
+        for (int i = 0; i < count - 1; i++) {
             quarterNum--;
             if (quarterNum < 1) {
                 quarterNum = 4;
                 year--;
+            }
+        }
+
+        // 과거부터 현재까지 순차적으로 추가
+        for (int i = 0; i < count; i++) {
+            quarters.add(String.format("%04d%02d", year, quarterNum));
+
+            // 다음 분기로 이동
+            quarterNum++;
+            if (quarterNum > 4) {
+                quarterNum = 1;
+                year++;
             }
         }
 

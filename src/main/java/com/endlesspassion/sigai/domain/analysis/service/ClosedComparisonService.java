@@ -33,7 +33,7 @@ public class ClosedComparisonService {
     /**
      * 폐업률 비교 분석 실행
      *
-     * @param quarters 분석할 분기 리스트 (최근 분기부터 과거 순)
+     * @param quarters 분석할 분기 리스트 (과거 분기부터 최신 순, 오름차순)
      * @param trdarCd 상권 코드
      * @param svcIndutyCd 업종 코드
      * @return 폐업률 비교 분석 결과
@@ -48,7 +48,7 @@ public class ClosedComparisonService {
         double sumOfRates = 0.0;
         int validCount = 0;
 
-        // 각 분기별 폐업률 계산
+        // 각 분기별 폐업률 계산 (과거부터 최신 순)
         for (String quarter : quarters) {
             ClosedComparison.QuarterlyClosedRate rate = calculateClosedRateForQuarter(
                     quarter, trdarCd, svcIndutyCd, previousRate);
@@ -155,21 +155,25 @@ public class ClosedComparisonService {
      * 왜 이 방식인가?
      * - 단기 변동성을 완화하고 전반적인 추세 파악
      * - 1% 임계값은 통계적 유의미성 고려 (조정 가능)
+     *
+     * 주의: 리스트는 오름차순(과거→최신)으로 정렬되어 있음
      */
     private String determineTrend(List<ClosedComparison.QuarterlyClosedRate> rates) {
         if (rates.size() < 6) {
             return "STABLE"; // 데이터가 부족하면 안정으로 판단
         }
 
-        // 최근 3개 분기 평균
-        double recentAvg = rates.subList(0, 3).stream()
+        int size = rates.size();
+
+        // 최근 3개 분기 평균 (리스트의 마지막 3개)
+        double recentAvg = rates.subList(size - 3, size).stream()
                 .filter(r -> r.getClosedRate() != null)
                 .mapToDouble(ClosedComparison.QuarterlyClosedRate::getClosedRate)
                 .average()
                 .orElse(0.0);
 
-        // 과거 3개 분기 평균
-        double pastAvg = rates.subList(3, 6).stream()
+        // 과거 3개 분기 평균 (리스트의 마지막에서 6~4번째)
+        double pastAvg = rates.subList(size - 6, size - 3).stream()
                 .filter(r -> r.getClosedRate() != null)
                 .mapToDouble(ClosedComparison.QuarterlyClosedRate::getClosedRate)
                 .average()
