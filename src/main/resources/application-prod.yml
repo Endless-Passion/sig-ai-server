@@ -59,6 +59,7 @@ seoul:
     store-key: ${STORE_API_KEY}
     store-service: VwsmTrdarStorQq
 
+
 quartz-cron:
   seoul-data-sync: "0 0 2 1 * ?"
 
