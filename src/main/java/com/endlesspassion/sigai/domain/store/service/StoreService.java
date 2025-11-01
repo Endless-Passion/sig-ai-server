@@ -1,5 +1,7 @@
 package com.endlesspassion.sigai.domain.store.service;
 
+import com.endlesspassion.sigai.domain.member.entity.Member;
+import com.endlesspassion.sigai.domain.member.repository.MemberRepository;
 import com.endlesspassion.sigai.domain.store.dto.request.StoreReq;
 import com.endlesspassion.sigai.domain.store.dto.respose.StoreRes;
 import com.endlesspassion.sigai.domain.store.entity.Store;
@@ -17,6 +19,7 @@ import java.util.stream.Collectors;
 public class StoreService {
 
     private final StoreRepository storeRepository;
+    private final MemberRepository memberRepository;
 
     public StoreRes get(Long storeId) {
         Store store = storeRepository.findById(storeId)
@@ -40,19 +43,39 @@ public class StoreService {
                 .collect(Collectors.toList());
     }
 
-    public void create(StoreReq req) {
-        storeRepository.save(req.to());
+    public void create(String phoneNumber, StoreReq req) {
+        Member member = memberRepository.findByPhoneNumber(phoneNumber)
+                .orElseThrow(() -> new IllegalArgumentException("해당 Member을 찾을 수 없음. phoneNumber: " + phoneNumber));
+        storeRepository.save(req.to(member));
     }
 
-    public void update(StoreReq req) {
-        Store store = storeRepository.findById(req.getStoreId())
-                .orElseThrow(() -> new IllegalArgumentException("해당 가게를 찾을 수 없습니다. ID: " + req.getStoreId()));
-        // JPA 변경 감지(Dirty Checking)에 의해 트랜잭션 종료 시 자동으로 UPDATE 쿼리 실행
-        // 따라서 save() 호출 불필요
+    public void update(String phoneNumber, Long storeId, StoreReq req) {
+
+        Member member = memberRepository.findByPhoneNumber(phoneNumber)
+                .orElseThrow(() -> new IllegalArgumentException("해당 Member을 찾을 수 없음. phoneNumber: " + phoneNumber));
+
+        Store store = storeRepository.findById(storeId)
+                .orElseThrow(() -> new IllegalArgumentException("해당 Store을 찾을 수 없음. storeId: " + storeId));
+
+        if (!store.getMember().getId().equals(member.getId())) {
+            // 일치하지 않으면 예외 발생
+            throw new SecurityException("가게 정보를 수정할 권한이 없습니다."); // (혹은 403 Forbidden Error)
+        }
+
         store.update(req);
     }
 
-    public void delete(StoreReq req) {
-        storeRepository.deleteById(req.getStoreId());
+    public void delete(String phoneNumber, Long storeId) {
+
+        Member member = memberRepository.findByPhoneNumber(phoneNumber)
+                .orElseThrow(() -> new IllegalArgumentException("해당 Member을 찾을 수 없음. phoneNumber: " + phoneNumber));
+
+        Store store = storeRepository.findById(storeId)
+                .orElseThrow(() -> new IllegalArgumentException("해당 Store을 찾을 수 없음. storeId: " + storeId));
+
+        if (!store.getMember().getId().equals(member.getId())) {
+            throw new SecurityException("가게 정보를 삭제할 권한이 없습니다.");
+        }
+        storeRepository.deleteById(storeId);
     }
 }
