@@ -10,7 +10,6 @@ import io.swagger.v3.oas.annotations.parameters.RequestBody;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -89,7 +88,7 @@ public class StoreController {
             )
     })
     @PostMapping("/store-info")
-    public ResponseEntity<ApiResponse<?>> registerStoreInfo(
+    public ApiResponse<?> registerStoreInfo(
             @RequestBody(
                     description = "가게 정보 입력 요청",
                     required = true,
@@ -117,7 +116,7 @@ public class StoreController {
             StoreReq request
     ) {
         // TODO: 가게 정보 입력 로직 구현
-        return ResponseEntity.ok(ApiResponse.success());
+        return ApiResponse.success();
     }
 
 }

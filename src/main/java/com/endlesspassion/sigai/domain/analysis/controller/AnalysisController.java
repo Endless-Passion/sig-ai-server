@@ -10,7 +10,6 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @Tag(name = "분석 API", description = "소상공인 상권 분석 관련 API")
@@ -100,10 +99,10 @@ public class AnalysisController {
             )
     })
     @PostMapping("/analysis")
-    public ResponseEntity<ApiResponse<?>> analysis(
+    public ApiResponse<?> analysis(
             @RequestBody MarketAnalysisReq req
     ) {
         marketAnalysisService.analyze(req);
-        return ResponseEntity.ok(ApiResponse.success("상권 분석이 완료되었습니다"));
+        return ApiResponse.success("상권 분석이 완료되었습니다");
     }
 }
