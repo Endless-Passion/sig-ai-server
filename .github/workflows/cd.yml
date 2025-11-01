@@ -66,7 +66,7 @@ jobs:
             cd /home/ubuntu/sig-ai-server
 
             # Docker Hub 로그인
-            echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
+            echo "${{ secrets.DOCKER_PASSWORD }}" | sudo docker login -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
 
             # Docker Compose 타임아웃 설정
             export COMPOSE_HTTP_TIMEOUT=1200
@@ -74,7 +74,7 @@ jobs:
             # 이미지 pull (재시도 로직 - 최대 3회)
             i=0
             until [ $i -ge 3 ]; do
-              if docker pull ${{ secrets.DOCKER_USERNAME }}/sig-ai-server:latest; then
+              if sudo docker pull ${{ secrets.DOCKER_USERNAME }}/sig-ai-server:latest; then
                 echo "이미지 pull 성공"
                 break
               fi
@@ -89,12 +89,12 @@ jobs:
             fi
 
             # 앱 서비스만 재시작
-            docker-compose -f docker-compose.prod.yml up -d --no-deps app
+            sudo docker-compose -f docker-compose.prod.yml up -d --no-deps app
 
             # Health check (최대 60초 대기)
             echo "Health check 시작..."
             for i in {1..12}; do
-              if docker logs sigai-app 2>&1 | grep -q "Started SigAiApplication"; then
+              if sudo docker logs sigai-app 2>&1 | grep -q "Started SigAiApplication"; then
                 echo "Health check 성공"
                 break
               fi
@@ -103,6 +103,6 @@ jobs:
             done
 
             # 이전 이미지 정리
-            docker image prune -f
+            sudo docker image prune -f
 
             echo "배포 완료"
