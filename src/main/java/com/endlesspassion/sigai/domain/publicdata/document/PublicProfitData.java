@@ -6,7 +6,7 @@ import org.springframework.data.mongodb.core.index.CompoundIndex;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 
-@Document(collection = "public_data")
+@Document(collection = "public_profit_data")
 @Data
 @CompoundIndex(name = "idx_unique_sales_data",
         def = "{'stdr_yyqu_cd': 1, 'trdar_cd': 1, 'svc_induty_cd': 1}",
