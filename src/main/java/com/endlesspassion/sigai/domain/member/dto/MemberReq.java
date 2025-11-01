@@ -3,13 +3,11 @@ package com.endlesspassion.sigai.domain.member.dto;
 import com.endlesspassion.sigai.domain.member.entity.Member;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
+import lombok.*;
 
 @Getter
 @AllArgsConstructor(access = AccessLevel.PROTECTED)
+@NoArgsConstructor
 @Builder
 public class MemberReq {
 
