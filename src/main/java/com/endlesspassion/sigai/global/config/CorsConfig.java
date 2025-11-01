@@ -6,21 +6,13 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @Configuration
 public class CorsConfig implements WebMvcConfigurer {
-    @Override public void addCorsMappings(CorsRegistry r) {
-        r.addMapping("/**")
-                .allowedOriginPatterns(
-                        //"https://www.domain.com", 도메인 연결시
-                        //"https://domain.com",
-                        //"https://api.guseokguseok.site",
-                        "http://localhost:*",
-                        "http://127.0.0.1:*",
-                        "http://192.168.*.*:*",   // LAN에서 직접 접속 시
-                        "https://localhost:*",    // HTTPS 로컬 쓰면 추가
-                        "https://127.0.0.1:*"
-                )
-                .allowedMethods("GET","POST","PUT","PATCH","DELETE","OPTIONS")
-                .allowedHeaders("*").exposedHeaders("*")
-                .allowCredentials(true)
-                .maxAge(3600);
+    @Override
+    public void addCorsMappings(CorsRegistry registry) {
+        registry.addMapping("/**")  // 1. 모든 경로에 대해
+                .allowedOriginPatterns("*")     // 2. 모든 Origin 패턴 허용 (http, https, localhost 등)
+                .allowedMethods("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS") // 3. 허용할 HTTP 메서드
+                .allowedHeaders("*")            // 4. 허용할 모든 헤더
+                .allowCredentials(true)         // 5. 자격 증명 (쿠키 등) 허용
+                .maxAge(3600);                  // 6. Preflight 요청 캐시 시간
     }
 }
