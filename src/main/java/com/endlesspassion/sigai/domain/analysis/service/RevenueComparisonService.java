@@ -41,7 +41,7 @@ public class RevenueComparisonService {
     //-순위 변화
     //경쟁강도 = 동일업종 점포수 / 상권 면적(면적 미존재 시 점포수 지표만)
 
-    // 매출 비교 분석 함수
+    // 매출 비교 분석 함수 (분기 리스트는 오름차순: 과거 → 최신)
     public RevenueComparison alalyze(
             List<String> quarters,
             String trdarCd,
@@ -51,7 +51,7 @@ public class RevenueComparisonService {
         List<RevenueComparison.QuarterlyRevenueRank> quarterlyRanks = new ArrayList<>();
         Integer previousRank = null;
 
-        // 각 분기별로 순위 계산
+        // 각 분기별로 순위 계산 (과거부터 최신 순)
         for(String quarger : quarters) {
             RevenueComparison.QuarterlyRevenueRank rank = calculateRankForQuarter(
                     quarger, trdarCd, svcIndutyCd, revenue, previousRank);
@@ -59,9 +59,9 @@ public class RevenueComparisonService {
             previousRank = rank.getRank();
         }
 
-        // 경쟁 강도 계산 (최근 분기 기준)
+        // 경쟁 강도 계산 (최근 분기 기준 - 리스트의 마지막)
         Double competitionIntensity = calculateCompetitionIntensity(
-                quarters.get(0), trdarCd, svcIndutyCd);
+                quarters.get(quarters.size() - 1), trdarCd, svcIndutyCd);
 
         return RevenueComparison.of(quarterlyRanks, competitionIntensity);
     }
