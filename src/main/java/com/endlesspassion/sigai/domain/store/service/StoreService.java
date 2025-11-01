@@ -8,6 +8,9 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @RequiredArgsConstructor
 @Transactional
 @Service
@@ -19,6 +22,22 @@ public class StoreService {
         Store store = storeRepository.findById(storeId)
                 .orElseThrow(() -> new IllegalArgumentException("해당 가게를 찾을 수 없습니다. ID: " + storeId));
         return StoreRes.from(store);
+    }
+
+    /**
+     * Member의 phoneNumber로 해당 사장님의 모든 가게를 조회
+     * JPA 1:N 관계 활용
+     */
+    public List<StoreRes> getStoresByPhoneNumber(String phoneNumber) {
+        List<Store> stores = storeRepository.findByMember_PhoneNumber(phoneNumber);
+
+        if (stores.isEmpty()) {
+            throw new IllegalArgumentException("해당 전화번호로 등록된 가게가 없습니다: " + phoneNumber);
+        }
+
+        return stores.stream()
+                .map(StoreRes::from)
+                .collect(Collectors.toList());
     }
 
     public void create(StoreReq req) {

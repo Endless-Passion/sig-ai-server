@@ -1,8 +1,8 @@
-package com.endlesspassion.sigai.domain.store.controller;
+package com.endlesspassion.sigai.domain.member.controller;
 
-import com.endlesspassion.sigai.domain.store.dto.request.StoreReq;
-import com.endlesspassion.sigai.domain.store.dto.respose.StoreRes;
-import com.endlesspassion.sigai.domain.store.service.StoreService;
+import com.endlesspassion.sigai.domain.member.dto.MemberReq;
+import com.endlesspassion.sigai.domain.member.dto.MemberRes;
+import com.endlesspassion.sigai.domain.member.service.MemberService;
 import com.endlesspassion.sigai.global.exception.ApiResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -14,29 +14,23 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
-@Tag(name = "가게 정보 API", description = "사장님 가게 정보 관리")
+@Tag(name = "사장님 관리 API", description = "사장님 정보 관리")
 @RequiredArgsConstructor
+@RequestMapping("/api/v1/member")
 @RestController
-@RequestMapping("/api/v1/store")
-public class StoreController {
+public class MemberController {
 
-    private final StoreService storeService;
+    private final MemberService memberService;
 
     @Operation(
-            summary = "가게 정보 등록",
+            summary = "사장님 등록",
             description = """
-                    가게 기본 정보를 등록합니다.
+                    사장님 정보를 등록합니다.
 
-                    - storeName: 가게 이름
-                    - serviceIndustry: 업종 (KOREAN, CHINESE, JAPANESE, WESTERN, CAFE, CHICKEN, PIZZA, BURGER, BAKERY, OTHER)
-                    - dong: 동 주소 (예: "성수동")
-                    - openingDate: 개업일 (YYYY-MM-DD)
-                    - gu: 구 주소 (선택, 예: "성동구")
-                    - brandCode: 브랜드 코드 (선택, 0: 일반, 1: 프랜차이즈)
+                    - name: 사장님 이름
+                    - phoneNumber: 전화번호 (010-1234-5678 형식)
 
-                    **참고:** 매출 데이터는 별도 API(/api/v1/revenue)로 등록합니다.
+                    **참고:** 전화번호는 중복될 수 없습니다.
                     """
     )
     @ApiResponses(value = {
@@ -51,7 +45,7 @@ public class StoreController {
                                             {
                                               "status": "success",
                                               "data": null,
-                                              "message": "가게 정보가 성공적으로 저장되었습니다."
+                                              "message": "사장님 정보가 성공적으로 등록되었습니다."
                                             }
                                             """
                             )
@@ -59,7 +53,7 @@ public class StoreController {
             ),
             @io.swagger.v3.oas.annotations.responses.ApiResponse(
                     responseCode = "400",
-                    description = "잘못된 요청",
+                    description = "잘못된 요청 (중복된 전화번호 또는 형식 오류)",
                     content = @Content(mediaType = "application/json")
             )
     })
@@ -71,27 +65,22 @@ public class StoreController {
                             examples = @ExampleObject(
                                     value = """
                                             {
-                                              "storeId": 1,
-                                              "storeName": "맛닭꼬끼오",
-                                              "serviceIndustry": "CHICKEN",
-                                              "gu": "성동구",
-                                              "dong": "성수동",
-                                              "openingDate": "2024-01-15",
-                                              "brandCode": 0
+                                              "name": "김사장",
+                                              "phoneNumber": "010-1234-5678"
                                             }
                                             """
                             )
                     )
             )
-            @Valid @RequestBody StoreReq req
+            @Valid @RequestBody MemberReq req
     ) {
-        storeService.create(req);
-        return ApiResponse.success("가게 정보가 성공적으로 저장되었습니다.");
+        memberService.create(req);
+        return ApiResponse.success("사장님 정보가 성공적으로 등록되었습니다.");
     }
 
     @Operation(
-            summary = "가게 정보 조회",
-            description = "특정 가게의 기본 정보를 조회합니다."
+            summary = "사장님 정보 조회 (ID)",
+            description = "사장님 ID로 정보를 조회합니다."
     )
     @ApiResponses(value = {
             @io.swagger.v3.oas.annotations.responses.ApiResponse(
@@ -106,12 +95,8 @@ public class StoreController {
                                               "status": "success",
                                               "data": {
                                                 "id": 1,
-                                                "storeName": "맛있는 치킨집",
-                                                "serviceIndustry": "CHICKEN",
-                                                "gu": "성동구",
-                                                "dong": "성수동",
-                                                "openingDate": "2024-01-15",
-                                                "isFranchise": false
+                                                "name": "김사장",
+                                                "phoneNumber": "010-1234-5678"
                                               },
                                               "message": null
                                             }
@@ -121,18 +106,18 @@ public class StoreController {
             ),
             @io.swagger.v3.oas.annotations.responses.ApiResponse(
                     responseCode = "404",
-                    description = "가게를 찾을 수 없음",
+                    description = "사장님을 찾을 수 없음",
                     content = @Content(mediaType = "application/json")
             )
     })
-    @GetMapping("/{storeId}")
-    public ApiResponse<StoreRes> get(@PathVariable Long storeId) {
-        return ApiResponse.success(storeService.get(storeId));
+    @GetMapping("/{memberId}")
+    public ApiResponse<MemberRes> get(@PathVariable Long memberId) {
+        return ApiResponse.success(memberService.get(memberId));
     }
 
     @Operation(
-            summary = "사장님 전화번호로 가게 목록 조회",
-            description = "사장님의 전화번호로 해당 사장님이 소유한 모든 가게를 조회합니다. (JPA 1:N 관계 활용)"
+            summary = "사장님 정보 조회 (전화번호)",
+            description = "전화번호로 사장님 정보를 조회합니다."
     )
     @ApiResponses(value = {
             @io.swagger.v3.oas.annotations.responses.ApiResponse(
@@ -145,26 +130,11 @@ public class StoreController {
                                     value = """
                                             {
                                               "status": "success",
-                                              "data": [
-                                                {
-                                                  "id": 1,
-                                                  "storeName": "맛닭꼬끼오",
-                                                  "serviceIndustry": "CHICKEN",
-                                                  "gu": "성동구",
-                                                  "dong": "성수동",
-                                                  "openingDate": "2024-01-15",
-                                                  "isFranchise": false
-                                                },
-                                                {
-                                                  "id": 2,
-                                                  "storeName": "꼬꼬댁 분점",
-                                                  "serviceIndustry": "CHICKEN",
-                                                  "gu": "강남구",
-                                                  "dong": "역삼동",
-                                                  "openingDate": "2024-06-01",
-                                                  "isFranchise": false
-                                                }
-                                              ],
+                                              "data": {
+                                                "id": 1,
+                                                "name": "김사장",
+                                                "phoneNumber": "010-1234-5678"
+                                              },
                                               "message": null
                                             }
                                             """
@@ -173,18 +143,18 @@ public class StoreController {
             ),
             @io.swagger.v3.oas.annotations.responses.ApiResponse(
                     responseCode = "404",
-                    description = "해당 전화번호로 등록된 가게를 찾을 수 없음",
+                    description = "해당 전화번호로 등록된 사장님을 찾을 수 없음",
                     content = @Content(mediaType = "application/json")
             )
     })
-    @GetMapping("/member/{phoneNumber}")
-    public ApiResponse<List<StoreRes>> getStoresByPhoneNumber(@PathVariable String phoneNumber) {
-        return ApiResponse.success(storeService.getStoresByPhoneNumber(phoneNumber));
+    @GetMapping("/phone/{phoneNumber}")
+    public ApiResponse<MemberRes> getByPhoneNumber(@PathVariable String phoneNumber) {
+        return ApiResponse.success(memberService.getByPhoneNumber(phoneNumber));
     }
 
     @Operation(
-            summary = "가게 정보 수정",
-            description = "가게 기본 정보를 수정합니다."
+            summary = "사장님 정보 수정",
+            description = "사장님 정보를 수정합니다."
     )
     @ApiResponses(value = {
             @io.swagger.v3.oas.annotations.responses.ApiResponse(
@@ -198,7 +168,7 @@ public class StoreController {
                                             {
                                               "status": "success",
                                               "data": null,
-                                              "message": "가게 정보가 성공적으로 수정되었습니다."
+                                              "message": "사장님 정보가 성공적으로 수정되었습니다."
                                             }
                                             """
                             )
@@ -206,40 +176,36 @@ public class StoreController {
             ),
             @io.swagger.v3.oas.annotations.responses.ApiResponse(
                     responseCode = "404",
-                    description = "가게를 찾을 수 없음",
+                    description = "사장님을 찾을 수 없음",
                     content = @Content(mediaType = "application/json")
             )
     })
-    @PutMapping("/{storeId}")
+    @PutMapping("/{memberId}")
     public ApiResponse<?> update(
-            @PathVariable Long storeId,
+            @PathVariable Long memberId,
             @io.swagger.v3.oas.annotations.parameters.RequestBody(
                     content = @Content(
                             mediaType = "application/json",
                             examples = @ExampleObject(
                                     value = """
                                             {
-                                              "storeId": 1,
-                                              "storeName": "더맛있는 치킨집",
-                                              "serviceIndustry": "CHICKEN",
-                                              "gu": "성동구",
-                                              "dong": "성수동",
-                                              "openingDate": "2024-01-15",
-                                              "brandCode": 1
+                                              "memberId": 1,
+                                              "name": "이사장",
+                                              "phoneNumber": "010-9876-5432"
                                             }
                                             """
                             )
                     )
             )
-            @Valid @RequestBody StoreReq req
+            @Valid @RequestBody MemberReq req
     ) {
-        storeService.update(req);
-        return ApiResponse.success("가게 정보가 성공적으로 수정되었습니다.");
+        memberService.update(req);
+        return ApiResponse.success("사장님 정보가 성공적으로 수정되었습니다.");
     }
 
     @Operation(
-            summary = "가게 정보 삭제",
-            description = "가게 정보를 삭제합니다."
+            summary = "사장님 정보 삭제",
+            description = "사장님 정보를 삭제합니다."
     )
     @ApiResponses(value = {
             @io.swagger.v3.oas.annotations.responses.ApiResponse(
@@ -253,17 +219,16 @@ public class StoreController {
                                             {
                                               "status": "success",
                                               "data": null,
-                                              "message": "가게 정보가 성공적으로 삭제되었습니다."
+                                              "message": "사장님 정보가 성공적으로 삭제되었습니다."
                                             }
                                             """
                             )
                     )
             )
     })
-    @DeleteMapping("/{storeId}")
-    public ApiResponse<?> delete(@PathVariable Long storeId) {
-        StoreReq req = StoreReq.builder().storeId(storeId).build();
-        storeService.delete(req);
-        return ApiResponse.success("가게 정보가 성공적으로 삭제되었습니다.");
+    @DeleteMapping("/{memberId}")
+    public ApiResponse<?> delete(@PathVariable Long memberId) {
+        memberService.delete(memberId);
+        return ApiResponse.success("사장님 정보가 성공적으로 삭제되었습니다.");
     }
 }

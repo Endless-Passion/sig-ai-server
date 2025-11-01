@@ -1,5 +1,6 @@
 package com.endlesspassion.sigai.domain.store.entity;
 
+import com.endlesspassion.sigai.domain.member.entity.Member;
 import com.endlesspassion.sigai.domain.store.dto.request.StoreReq;
 import com.endlesspassion.sigai.global.common.entity.BaseTimeEntity;
 import com.endlesspassion.sigai.global.common.enums.ServiceArea;
@@ -43,6 +44,10 @@ public class Store extends BaseTimeEntity {
 
     @Column(nullable = false)
     private Boolean isFranchise; // 1: true, 0: false
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "member_id")
+    private Member member;
 
     public void update(StoreReq dto) {
         this.storeName = dto.getStoreName();
