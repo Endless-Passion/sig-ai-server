@@ -1,5 +1,8 @@
 package com.endlesspassion.sigai.domain.predict.client.controller;
 
+import com.endlesspassion.sigai.domain.predict.client.dto.PredictReq;
+import com.endlesspassion.sigai.domain.predict.client.dto.PredictRes; // Import 추가
+import com.endlesspassion.sigai.domain.predict.client.service.PredictService;
 import com.endlesspassion.sigai.global.exception.ApiResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -7,6 +10,8 @@ import io.swagger.v3.oas.annotations.media.ExampleObject;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid; // Import 추가
+import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -14,8 +19,11 @@ import org.springframework.web.bind.annotation.RestController;
 
 @Tag(name = "예측 API", description = "소상공인 폐업 예측 관련 API")
 @RestController
+@RequiredArgsConstructor
 @RequestMapping("/api/v1")
 public class PredictController {
+
+    private final PredictService predictService;
 
     @Operation(
             summary = "폐업 예측",
@@ -41,11 +49,20 @@ public class PredictController {
                                             {
                                               "status": "success",
                                               "data": {
-                                                  "prediction_tier": "주의" | "위험" | "안정",
-                                                  "xgb_probability": 0.1504, // 주위 or 위험일 때 위험도
-                                                  "rf_probability": 0.4522, // 안정일 때 위험도
-                                                  "threshold_caution": 0.0997, // 주의 판단 기준 임계값
-                                                  "threshold_danger": 0.5520  // 위험 판단 기준 임계값
+                                                  "prediction_tier": "주의",
+                                                  "xgb_probability": 0.1504,
+                                                  "rf_probability": 0.4522,
+                                                  "threshold_caution": 0.0997,
+                                                  "threshold_danger": 0.5520,
+                                                  "changedRevenue": {
+                                                      "rankChange": null,
+                                                      "percentileChange": null,
+                                                      "countChange": -50
+                                                  },
+                                                  "changeClose": {
+                                                      "closedRate": 5.5,
+                                                      "rateChange": 1
+                                                  }
                                               },
                                               "message": null
                                             }
@@ -112,9 +129,10 @@ public class PredictController {
     @PostMapping("/predict")
     @SuppressWarnings("unused")
     public ApiResponse<?> predict(
-            @RequestBody Object request // TODO: PredictRequest DTO로 교체 예정
+            @Valid @RequestBody PredictReq request // @Valid 추가, DTO 이름 수정 없음
     ) {
-        // TODO: 예측 서비스 로직 구현
-        return ApiResponse.success();
+        // [수정] 서비스 로직 호출 및 응답 반환
+        PredictRes response = predictService.predict(request);
+        return ApiResponse.success(response);
     }
 }

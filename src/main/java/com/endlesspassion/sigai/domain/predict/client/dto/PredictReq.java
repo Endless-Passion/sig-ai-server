@@ -17,5 +17,5 @@ public class PredictReq {
     private String quarter;
 
     @NotNull(message = "운영 개월 수는 필수입니다.")
-    private Integer monthsOfOperation;
+    private String monthsOfOperation;
 }

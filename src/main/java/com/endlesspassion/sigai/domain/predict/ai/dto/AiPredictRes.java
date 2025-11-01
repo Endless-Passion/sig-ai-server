@@ -1,11 +1,12 @@
 package com.endlesspassion.sigai.domain.predict.ai.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @Getter
-@NoArgsConstructor
+@Builder
+@AllArgsConstructor(access = AccessLevel.PROTECTED)
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class AiPredictRes {
 
     @JsonProperty("prediction_tier")

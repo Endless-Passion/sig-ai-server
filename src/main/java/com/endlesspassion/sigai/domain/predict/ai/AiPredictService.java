@@ -3,22 +3,28 @@ package com.endlesspassion.sigai.domain.predict.ai;
 
 import com.endlesspassion.sigai.domain.predict.ai.dto.AiPredictReq;
 import com.endlesspassion.sigai.domain.predict.ai.dto.AiPredictRes;
+import com.endlesspassion.sigai.domain.predict.client.dto.PredictReq;
+import com.endlesspassion.sigai.domain.predict.client.dto.PredictRes;
+import com.endlesspassion.sigai.domain.publicdata.document.PublicProfitData;
+import com.endlesspassion.sigai.domain.publicdata.service.PublicDataService;
+import com.endlesspassion.sigai.domain.store.entity.Store;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
+
+import java.util.List;
 
 @Service
 public class AiPredictService {
 
     private final WebClient webClient;
 
-    public AiPredictService(@Qualifier("seoulApiWebClient") WebClient webClient) {
-        // "WebClient" 타입의 Bean이 두 개 있지만,
-        // 이름이 "seoulApiWebClient"인 Bean을 주입하도록 명시
+    public AiPredictService(@Qualifier("aiApiWebClient") WebClient webClient) {
         this.webClient = webClient;
     }
 
-    public AiPredictRes get(AiPredictReq req) {
+    public AiPredictRes predict(AiPredictReq req) {
+
 
         // webclient로 ai로부터 요청 후 응답 가져오기!
         AiPredictRes res = webClient.post()
@@ -34,5 +40,4 @@ public class AiPredictService {
 
         return res;
     }
-
 }
