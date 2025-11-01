@@ -41,7 +41,7 @@ public class RevenueComparisonService {
     //경쟁강도 = 동일업종 점포수 / 상권 면적(면적 미존재 시 점포수 지표만)
 
     // 매출 비교 분석 함수
-    public RevenueComparison alalyze(
+    public RevenueComparison analyze(
             List<String> quarters,
             String trdarCd,
             String svcIndutyCd,

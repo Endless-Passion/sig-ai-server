@@ -5,7 +5,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class PopulationComparisonService {
-    public PopulationComparison alalysis() {
+    public PopulationComparison analysis() {
         return null;
     }
 }

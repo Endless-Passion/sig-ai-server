@@ -65,8 +65,8 @@ public class MarketAnalysisService {
         return MarketAnalysisRes.of(
                 req.getStoreId(),
                 store.getStoreName(),
-                revenueComparisonService.alalyze(quarters, trdarCd, svcIndutyCd, quarterlyRevenue),
-                populationComparisonService.alalysis(),
+                revenueComparisonService.analyze(quarters, trdarCd, svcIndutyCd, quarterlyRevenue),
+                populationComparisonService.analysis(),
                 closedComparisonService.analyze(quarters, trdarCd, svcIndutyCd)
         );
     }
