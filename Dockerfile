@@ -3,7 +3,7 @@ FROM gradle:8.5-jdk17 AS build
 WORKDIR /app
 
 # Gradle 캐시 활용을 위해 먼저 복사
-COPY build.gradle settings.gradle
+COPY build.gradle settings.gradle ./
 COPY gradle gradle
 
 # 소스 코드 복사 및 빌드
