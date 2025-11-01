@@ -1,4 +1,4 @@
-package com.endlesspassion.sigai.domain.member;
+package com.endlesspassion.sigai.domain.member.controller;
 
 import com.endlesspassion.sigai.domain.member.dto.MemberReq;
 import com.endlesspassion.sigai.domain.member.dto.MemberRes;

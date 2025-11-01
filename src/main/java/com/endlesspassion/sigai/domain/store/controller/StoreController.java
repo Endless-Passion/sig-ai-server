@@ -177,7 +177,7 @@ public class StoreController {
                     content = @Content(mediaType = "application/json")
             )
     })
-    @GetMapping("/member/phone/{phoneNumber}")
+    @GetMapping("/member/{phoneNumber}")
     public ApiResponse<List<StoreRes>> getStoresByPhoneNumber(@PathVariable String phoneNumber) {
         return ApiResponse.success(storeService.getStoresByPhoneNumber(phoneNumber));
     }
