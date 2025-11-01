@@ -1,6 +1,6 @@
 services:
   app:
-    image: ${DOCKER_USERNAME}/sig-ai-server:latest
+    image: choikang7157/sig-ai-server:latest
     container_name: sigai-app
     ports:
       - "8080:8080"

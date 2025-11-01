@@ -8,13 +8,13 @@ spring:
   data:
     mongodb:
       # DocumentDB 또는 MongoDB Atlas 엔드포인트로 변경 필요
-      # uri: ${MONGODB_URI}
-      host: ${MONGODB_HOST}
-      port: ${MONGODB_PORT}
-      username: ${MONGODB_USERNAME}
-      password: ${MONGODB_PASSWORD}
-      database: ${MONGODB_DATABASE}
-      authentication-database: admin
+      uri: ${MONGODB_URI}
+#      host: ${MONGODB_HOST}
+#      port: ${MONGODB_PORT}
+#      username: ${MONGODB_USERNAME}
+#      password: ${MONGODB_PASSWORD}
+#      database: ${MONGODB_DATABASE}
+#      authentication-database: admin
 
   jpa:
     hibernate:
@@ -42,7 +42,7 @@ spring:
   quartz:
     job-store-type: jdbc
     jdbc:
-      initialize-schema: never  # prod에서는 never
+      initialize-schema: always  # Quartz 테이블 자동 생성
     properties:
       org:
         quartz:
