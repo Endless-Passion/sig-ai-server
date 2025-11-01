@@ -40,4 +40,3 @@ application-dev.yml
 docs/
 .env
 commercialDataTest
-src/test/java/com/endlesspassion/sigai/batch/
