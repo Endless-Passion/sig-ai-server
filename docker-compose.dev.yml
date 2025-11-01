@@ -1,0 +1,37 @@
+services:
+  mongo:
+    image: mongo:7.0
+    container_name: sigai-mongo
+    env_file: [.env]
+    ports: ["27017:27017"]
+    volumes:
+      - mongo_data:/data/db # 데이터 저장용
+    networks: [my-network]
+    healthcheck:
+      test: ["CMD-SHELL", "mongosh --quiet --eval 'db.adminCommand({ping:1}).ok' | grep 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  mysql:
+    image: mysql:8.0
+    container_name: sigai-mysql
+    env_file: [.env]
+    ports:
+      - "3307:3306" # 포트는 3307 사용
+    volumes:
+      - mysql-data:/var/lib/mysql
+    networks: [my-network]
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+networks:
+  my-network:
+    driver: bridge
+
+volumes:
+  mongo_data:
+  mysql-data:
