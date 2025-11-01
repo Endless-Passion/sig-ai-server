@@ -51,7 +51,7 @@ public class Store extends BaseTimeEntity {
 
     public void update(StoreReq dto) {
         this.storeName = dto.getStoreName();
-        this.serviceArea = dto.to().getServiceArea();
+        this.serviceArea = dto.getServiceArea();
         this.serviceIndustry = dto.getServiceIndustry();
         this.gu = dto.getGu();
         this.dong = dto.getDong();

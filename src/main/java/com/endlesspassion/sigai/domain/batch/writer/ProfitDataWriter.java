@@ -1,7 +1,9 @@
 package com.endlesspassion.sigai.domain.batch.writer;
 
 import com.endlesspassion.sigai.domain.publicdata.document.PublicProfitData;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
+import org.bson.Document;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
@@ -12,8 +14,11 @@ import org.springframework.stereotype.Component;
 @Component
 public class ProfitDataWriter extends AbstractPublicDataWriter<PublicProfitData> {
 
-    public ProfitDataWriter(MongoTemplate mongoTemplate) {
+    private final ObjectMapper objectMapper;
+
+    public ProfitDataWriter(MongoTemplate mongoTemplate, ObjectMapper objectMapper) {
         super(mongoTemplate);
+        this.objectMapper = objectMapper;
     }
 
     @Override
@@ -35,34 +40,22 @@ public class ProfitDataWriter extends AbstractPublicDataWriter<PublicProfitData>
         );
     }
 
+    /**
+     * [성능 최적화] ObjectMapper를 사용해 객체를 Document로 한 번에 변환
+     * - 기존: update.set() 20번 호출 (1,000개 처리 시 20,000번)
+     * - 개선: $set Document로 일괄 변환 (1,000개 처리 시 1,000번)
+     * - 예상 성능: 1페이지(1,000건) 처리 시간 50초 → 10초 이내
+     */
     @Override
     protected Update buildUpdate(PublicProfitData entity) {
-        Update update = new Update();
+        // 객체를 BSON Document로 변환
+        Document doc = objectMapper.convertValue(entity, Document.class);
 
-        update.set("stdr_yyqu_cd", entity.getStdrYyquCd());
-        update.set("trdar_se_cd", entity.getTrdarSeCd());
-        update.set("trdar_se_cd_nm", entity.getTrdarSeCdNm());
-        update.set("trdar_cd", entity.getTrdarCd());
-        update.set("trdar_cd_nm", entity.getTrdarCdNm());
-        update.set("svc_induty_cd", entity.getSvcIndutyCd());
-        update.set("svc_induty_cd_nm", entity.getSvcIndutyCdNm());
+        // Upsert 시 _id 충돌 방지를 위해 제거
+        doc.remove("_id");
+        doc.remove("id");
 
-        update.set("thsmon_selng_amt", entity.getThsmonSelngAmt());
-        update.set("ml_selng_amt", entity.getMlSelngAmt());
-        update.set("fml_selng_amt", entity.getFmlSelngAmt());
-
-        update.set("thsmon_selng_co", entity.getThsmonSelngCo());
-        update.set("mdwk_selng_co", entity.getMdwkSelngCo());
-        update.set("ml_selng_co", entity.getMlSelngCo());
-        update.set("fml_selng_co", entity.getFmlSelngCo());
-
-        update.set("agrde_10_selng_co", entity.getAgrde10SelngCo());
-        update.set("agrde_20_selng_co", entity.getAgrde20SelngCo());
-        update.set("agrde_30_selng_co", entity.getAgrde30SelngCo());
-        update.set("agrde_40_selng_co", entity.getAgrde40SelngCo());
-        update.set("agrde_50_selng_co", entity.getAgrde50SelngCo());
-        update.set("agrde_60_above_selng_co", entity.getAgrde60AboveSelngCo());
-
-        return update;
+        // $set 연산자로 감싸서 Update 객체로 변환
+        return Update.fromDocument(new Document("$set", doc));
     }
 }

@@ -71,7 +71,7 @@ public class StoreController {
                             examples = @ExampleObject(
                                     value = """
                                             {
-                                              "storeId": 1,
+                                              "phoneNumber": 010-1234-5678,
                                               "storeName": "맛닭꼬끼오",
                                               "serviceIndustry": "CHICKEN",
                                               "gu": "성동구",
@@ -83,9 +83,10 @@ public class StoreController {
                             )
                     )
             )
+            @RequestParam String phoneNumber,
             @Valid @RequestBody StoreReq req
     ) {
-        storeService.create(req);
+        storeService.create(phoneNumber, req);
         return ApiResponse.success("가게 정보가 성공적으로 저장되었습니다.");
     }
 
@@ -105,7 +106,7 @@ public class StoreController {
                                             {
                                               "status": "success",
                                               "data": {
-                                                "id": 1,
+                                                "phoneNumber": 010-1234-5678,
                                                 "storeName": "맛있는 치킨집",
                                                 "serviceIndustry": "CHICKEN",
                                                 "gu": "성동구",
@@ -210,30 +211,14 @@ public class StoreController {
                     content = @Content(mediaType = "application/json")
             )
     })
+
     @PutMapping("/{storeId}")
     public ApiResponse<?> update(
+            @RequestParam String phoneNumber, // [추가] 누가 수정하는지 식별
             @PathVariable Long storeId,
-            @io.swagger.v3.oas.annotations.parameters.RequestBody(
-                    content = @Content(
-                            mediaType = "application/json",
-                            examples = @ExampleObject(
-                                    value = """
-                                            {
-                                              "storeId": 1,
-                                              "storeName": "더맛있는 치킨집",
-                                              "serviceIndustry": "CHICKEN",
-                                              "gu": "성동구",
-                                              "dong": "성수동",
-                                              "openingDate": "2024-01-15",
-                                              "brandCode": 1
-                                            }
-                                            """
-                            )
-                    )
-            )
             @Valid @RequestBody StoreReq req
     ) {
-        storeService.update(req);
+        storeService.update(phoneNumber, storeId, req);
         return ApiResponse.success("가게 정보가 성공적으로 수정되었습니다.");
     }
 
@@ -261,9 +246,11 @@ public class StoreController {
             )
     })
     @DeleteMapping("/{storeId}")
-    public ApiResponse<?> delete(@PathVariable Long storeId) {
-        StoreReq req = StoreReq.builder().storeId(storeId).build();
-        storeService.delete(req);
+    public ApiResponse<?> delete(
+            @RequestParam String phoneNumber, // [추가] 누가 삭제하는지 식별
+            @PathVariable Long storeId
+    ) {
+        storeService.delete(phoneNumber, storeId);
         return ApiResponse.success("가게 정보가 성공적으로 삭제되었습니다.");
     }
 }
