@@ -1,7 +1,9 @@
 package com.endlesspassion.sigai.domain.batch.writer;
 
 import com.endlesspassion.sigai.domain.publicdata.document.PublicStoreData;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
+import org.bson.Document;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
@@ -12,8 +14,11 @@ import org.springframework.stereotype.Component;
 @Component
 public class StoreDataWriter extends AbstractPublicDataWriter<PublicStoreData> {
 
-    public StoreDataWriter(MongoTemplate mongoTemplate) {
+    private final ObjectMapper objectMapper;
+
+    public StoreDataWriter(MongoTemplate mongoTemplate, ObjectMapper objectMapper) {
         super(mongoTemplate);
+        this.objectMapper = objectMapper;
     }
 
     @Override
@@ -35,26 +40,22 @@ public class StoreDataWriter extends AbstractPublicDataWriter<PublicStoreData> {
         );
     }
 
+    /**
+     * [성능 최적화] ObjectMapper를 사용해 객체를 Document로 한 번에 변환
+     * - 기존: update.set() 14번 호출 (1,000개 처리 시 14,000번)
+     * - 개선: Update.fromDocument() 1번 호출 (1,000개 처리 시 1,000번)
+     * - 예상 성능: 1페이지(1,000건) 처리 시간 50초 → 10초 이내
+     */
     @Override
     protected Update buildUpdate(PublicStoreData entity) {
-        Update update = new Update();
+        // 객체를 BSON Document로 변환
+        Document doc = objectMapper.convertValue(entity, Document.class);
 
-        update.set("stdr_yyqu_cd", entity.getStdrYyquCd());
-        update.set("trdar_se_cd", entity.getTrdarSeCd());
-        update.set("trdar_se_cd_nm", entity.getTrdarSeCdNm());
-        update.set("trdar_cd", entity.getTrdarCd());
-        update.set("trdar_cd_nm", entity.getTrdarCdNm());
-        update.set("svc_induty_cd", entity.getSvcIndutyCd());
-        update.set("svc_induty_cd_nm", entity.getSvcIndutyCdNm());
+        // Upsert 시 _id 충돌 방지를 위해 제거
+        doc.remove("_id");
+        doc.remove("id");
 
-        update.set("stor_co", entity.getStorCo());
-        update.set("similr_induty_stor_co", entity.getSimilrIndutyStorCo());
-        update.set("opbiz_rt", entity.getOpbizRt());
-        update.set("opbiz_stor_co", entity.getOpbizStorCo());
-        update.set("clsbiz_rt", entity.getClsbizRt());
-        update.set("clsbiz_stor_co", entity.getClsbizStorCo());
-        update.set("frc_stor_co", entity.getFrcStorCo());
-
-        return update;
+        // Document 전체를 Update 객체로 변환
+        return Update.fromDocument(doc);
     }
 }
