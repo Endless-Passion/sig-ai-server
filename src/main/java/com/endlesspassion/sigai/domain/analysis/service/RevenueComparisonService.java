@@ -8,7 +8,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import javax.swing.*;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
@@ -41,27 +40,34 @@ public class RevenueComparisonService {
     //-순위 변화
     //경쟁강도 = 동일업종 점포수 / 상권 면적(면적 미존재 시 점포수 지표만)
 
-    // 매출 비교 분석 함수 (분기 리스트는 오름차순: 과거 → 최신)
-    public RevenueComparison alalyze(
+    // 매출 비교 분석 함수
+    public RevenueComparison analyze(
             List<String> quarters,
             String trdarCd,
             String svcIndutyCd,
-            BigDecimal revenue
+            List<BigDecimal> revenues
     ) {
+        if (quarters.size() != revenues.size()) {
+            throw new IllegalArgumentException("분기 수와 매출 데이터 수가 일치하지 않습니다.");
+        }
+
         List<RevenueComparison.QuarterlyRevenueRank> quarterlyRanks = new ArrayList<>();
         Integer previousRank = null;
 
-        // 각 분기별로 순위 계산 (과거부터 최신 순)
-        for(String quarger : quarters) {
+        // 각 분기별로 순위 계산 (각 분기에 해당하는 매출 사용)
+        for(int i = 0; i < quarters.size(); i++) {
+            String quarter = quarters.get(i);
+            BigDecimal revenue = revenues.get(i);
+
             RevenueComparison.QuarterlyRevenueRank rank = calculateRankForQuarter(
-                    quarger, trdarCd, svcIndutyCd, revenue, previousRank);
+                    quarter, trdarCd, svcIndutyCd, revenue, previousRank);
             quarterlyRanks.add(rank);
             previousRank = rank.getRank();
         }
 
-        // 경쟁 강도 계산 (최근 분기 기준 - 리스트의 마지막)
+        // 경쟁 강도 계산 (최근 분기 기준)
         Double competitionIntensity = calculateCompetitionIntensity(
-                quarters.get(quarters.size() - 1), trdarCd, svcIndutyCd);
+                quarters.get(0), trdarCd, svcIndutyCd);
 
         return RevenueComparison.of(quarterlyRanks, competitionIntensity);
     }

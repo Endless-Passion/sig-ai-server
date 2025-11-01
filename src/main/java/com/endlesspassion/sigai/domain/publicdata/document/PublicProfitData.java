@@ -6,7 +6,7 @@ import org.springframework.data.mongodb.core.index.CompoundIndex;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 
-@Document(collection = "public_data")
+@Document(collection = "public_profit_data")
 @Data
 @CompoundIndex(name = "idx_unique_sales_data",
         def = "{'stdr_yyqu_cd': 1, 'trdar_cd': 1, 'svc_induty_cd': 1}",
@@ -16,9 +16,8 @@ public class PublicProfitData {
     @Id
     private String id;
 
-    // --- 상권 및 업종 정보 (String) ---
     @Field("stdr_yyqu_cd")
-    private String stdrYyquCd; // 기준_년분기_코드
+    private String stdrYyquCd;
 
     @Field("trdar_se_cd")
     private String trdarSeCd; // 상권_구분_코드

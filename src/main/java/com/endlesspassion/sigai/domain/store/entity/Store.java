@@ -1,7 +1,8 @@
 package com.endlesspassion.sigai.domain.store.entity;
 
-import com.endlesspassion.sigai.domain.store.dto.StoreReq;
+import com.endlesspassion.sigai.domain.store.dto.request.StoreReq;
 import com.endlesspassion.sigai.global.common.entity.BaseTimeEntity;
+import com.endlesspassion.sigai.global.common.enums.ServiceArea;
 import com.endlesspassion.sigai.global.common.enums.ServiceIndustry;
 import jakarta.persistence.*;
 import lombok.*;
@@ -23,7 +24,11 @@ public class Store extends BaseTimeEntity {
     @Column(nullable = false, length = 100)
     private String storeName;
 
-    @Enumerated(EnumType.STRING) // Enum 이름을 문자열로 저장 (예: CS100001)
+    @Enumerated(EnumType.STRING) // Enum 이름을 문자열로 저장 (예: 공릉동 국수거리)
+    @Column(nullable = false, length = 20)
+    private ServiceArea serviceArea;
+
+    @Enumerated(EnumType.STRING) // Enum 이름을 문자열로 저장 (예: 한식)
     @Column(nullable = false, length = 20)
     private ServiceIndustry serviceIndustry;
 
@@ -37,10 +42,11 @@ public class Store extends BaseTimeEntity {
     private LocalDate openingDate;
 
     @Column(nullable = false)
-    private boolean isFranchise; // 1: true, 0: false
+    private Boolean isFranchise; // 1: true, 0: false
 
     public void update(StoreReq dto) {
         this.storeName = dto.getStoreName();
+        this.serviceArea = dto.to().getServiceArea();
         this.serviceIndustry = dto.getServiceIndustry();
         this.gu = dto.getGu();
         this.dong = dto.getDong();

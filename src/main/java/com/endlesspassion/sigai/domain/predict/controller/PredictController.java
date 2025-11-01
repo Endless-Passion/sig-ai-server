@@ -7,7 +7,6 @@ import io.swagger.v3.oas.annotations.media.ExampleObject;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -83,10 +82,10 @@ public class PredictController {
     })
     @PostMapping("/predict")
     @SuppressWarnings("unused")
-    public ResponseEntity<ApiResponse<?>> predict(
+    public ApiResponse<?> predict(
             @RequestBody Object request // TODO: PredictRequest DTO로 교체 예정
     ) {
         // TODO: 예측 서비스 로직 구현
-        return ResponseEntity.ok(ApiResponse.success());
+        return ApiResponse.success();
     }
 }

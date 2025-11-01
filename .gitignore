@@ -35,14 +35,10 @@ out/
 
 ### VS Code ###
 .vscode/
-
-### 설정 파일
-/src/main/resources/application.yml
-/src/main/resources/db.yml
-
 application.yml
 application-dev.yml
 docs/
-.env.dev
 .env
+.env.prod
 commercialDataTest
+src/test/java/com/endlesspassion/sigai/batch/

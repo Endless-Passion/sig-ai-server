@@ -1,6 +1,6 @@
 package com.endlesspassion.sigai.domain.store.entity;
 
-import com.endlesspassion.sigai.domain.store.dto.StoreRevenueReq;
+import com.endlesspassion.sigai.domain.store.dto.request.StoreRevenueReq;
 import com.endlesspassion.sigai.global.common.entity.BaseTimeEntity;
 import jakarta.persistence.*;
 import lombok.*;
@@ -37,11 +37,11 @@ public class StoreRevenue extends BaseTimeEntity {
     @Column(name = "returning_customer_ratio")
     private Float returningCustomerRatio;
 
-    // 년월 (YYYY형식, 예: "2024")
+    // 년 (YYYY형식, 예: "2024")
     @Column(name = "reveunue_year", nullable = false)
     private int year;
 
-    // 년월 (MM 형식, 예: "202401")
+    // 월 (MM 형식, 예: "202401")
     @Column(name = "revenue_month", nullable = false)
     private int month;
 
