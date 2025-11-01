@@ -1,4 +1,4 @@
-package com.endlesspassion.sigai.domain.predict;
+package com.endlesspassion.sigai.domain.predict.client.service;
 
 
 import com.endlesspassion.sigai.domain.publicdata.service.PublicDataService;

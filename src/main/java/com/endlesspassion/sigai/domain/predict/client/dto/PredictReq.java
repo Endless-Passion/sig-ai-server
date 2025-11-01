@@ -1,4 +1,4 @@
-package com.endlesspassion.sigai.domain.predict.dto;
+package com.endlesspassion.sigai.domain.predict.client.dto;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;

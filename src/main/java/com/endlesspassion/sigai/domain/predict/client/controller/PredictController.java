@@ -1,4 +1,4 @@
-package com.endlesspassion.sigai.domain.predict.controller;
+package com.endlesspassion.sigai.domain.predict.client.controller;
 
 import com.endlesspassion.sigai.global.exception.ApiResponse;
 import io.swagger.v3.oas.annotations.Operation;
