@@ -10,7 +10,7 @@ import org.springframework.web.reactive.function.client.WebClient;
 @Configuration
 public class AiWebClientConfig {
 
-    private static final String BASE_URL = "http://13.124.15.77:8080/predict";
+    private static final String BASE_URL = "http://13.124.15.77:8080";
 
     @Bean
     public WebClient aiApiWebClient() {

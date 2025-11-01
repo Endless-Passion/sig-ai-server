@@ -2,14 +2,20 @@ package com.endlesspassion.sigai.domain.batch.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 
 @Service
-@RequiredArgsConstructor
 @Slf4j
 public class GetPublicDataService {
     private final WebClient webClient;
+
+    public GetPublicDataService(@Qualifier("seoulApiWebClient") WebClient webClient) {
+        // "WebClient" 타입의 Bean이 두 개 있지만,
+        // 이름이 "seoulApiWebClient"인 Bean을 주입하도록 명시
+        this.webClient = webClient;
+    }
 
     public String fetchData(String apiKey, String serviceName, int startIndex, int endIndex) {
 
