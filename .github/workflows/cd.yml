@@ -88,8 +88,11 @@ jobs:
               exit 1
             fi
 
+            # 환경변수 설정
+            export DOCKER_USERNAME=${{ secrets.DOCKER_USERNAME }}
+
             # 앱 서비스만 재시작
-            sudo docker-compose -f docker-compose.prod.yml up -d --no-deps app
+            sudo -E docker-compose -f docker-compose.prod.yml up -d --no-deps app
 
             # Health check (최대 60초 대기)
             echo "Health check 시작..."
