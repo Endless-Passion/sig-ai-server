@@ -6,7 +6,7 @@ import org.springframework.data.mongodb.core.index.CompoundIndex;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 
-@Document(collection = "public_data_store") // "점포" 데이터를 위한 별도 컬렉션
+@Document(collection = "public_store_data") // "점포" 데이터를 위한 별도 컬렉션
 @Data
 @CompoundIndex(name = "idx_unique_store_data",
         def = "{'stdr_yyqu_cd': 1, 'trdar_cd': 1, 'svc_induty_cd': 1}",

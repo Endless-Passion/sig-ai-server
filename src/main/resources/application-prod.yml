@@ -1,0 +1,71 @@
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://${MYSQL_HOST}:${MYSQL_PORT}/${MYSQL_DATABASE}?serverTimezone=Asia/Seoul&characterEncoding=UTF-8
+    username: ${MYSQL_USERNAME}
+    password: ${MYSQL_PASSWORD}
+
+  data:
+    mongodb:
+      # DocumentDB 또는 MongoDB Atlas 엔드포인트로 변경 필요
+      # uri: ${MONGODB_URI}
+      host: ${MONGODB_HOST}
+      port: ${MONGODB_PORT}
+      username: ${MONGODB_USERNAME}
+      password: ${MONGODB_PASSWORD}
+      database: ${MONGODB_DATABASE}
+      authentication-database: admin
+
+  jpa:
+    hibernate:
+      ddl-auto: update  # prod에서는 validate 또는 none 사용
+    properties:
+      hibernate:
+        format_sql: false  # prod에서는 false
+        show_sql: false    # prod에서는 false
+    open-in-view: false
+
+  # ----------------------------------------
+  # Spring Batch 설정
+  # ----------------------------------------
+  batch:
+    job:
+      enabled: false
+    jdbc:
+      initialize-schema: never  # prod에서는 never
+
+  # ----------------------------------------
+  # Quartz 설정
+  # ----------------------------------------
+  quartz:
+    job-store-type: jdbc
+    jdbc:
+      initialize-schema: never  # prod에서는 never
+    properties:
+      org:
+        quartz:
+          scheduler:
+            instanceName: sigaiScheduler
+          jobStore:
+            driverDelegateClass: org.quartz.impl.jdbcjobstore.StdJDBCDelegate
+
+seoul:
+  api:
+    base-url: http://openapi.seoul.go.kr:8088
+    sales-key: ${PROFIT_API_KEY}
+    sales-service: VwsmTrdhlSelngQq
+    store-key: ${STORE_API_KEY}
+    store-service: VwsmTrdarStorQq
+
+quartz-cron:
+  seoul-data-sync: "0 0 2 1 * ?"
+
+logging:
+  level:
+    root: INFO
+    com.endless.passion: INFO
+    org.hibernate.SQL: WARN
+  file:
+    name: /var/log/sigai/application.log
+    max-size: 10MB
+    max-history: 30
