@@ -23,9 +23,10 @@ public class StoreController {
     @Operation(
             summary = "가게 정보 입력",
             description = """
-                    사장님이 가게 정보를 입력하여 저장합니다.
+                    사장님이 가게 기본 정보를 입력하여 저장합니다.
 
                     **필수 입력 정보:**
+                    - storeId: 가게 고유 ID
                     - storeName: 가게 이름 (최대 100자)
                     - serviceIndustry: 업종 (KOREAN, CHINESE, JAPANESE, WESTERN, CAFE, CHICKEN, PIZZA, BURGER, BAKERY, OTHER)
                     - dong: 동 주소 (최대 50자, 예: "성수동")
@@ -35,20 +36,9 @@ public class StoreController {
                     - gu: 구명 (최대 50자, 예: "성동구")
                     - brandCode: 브랜드 코드 (0: 일반, 1: 프랜차이즈)
 
-                    **고객 통계 (선택, %단위, 0.0~100.0):**
-                    - maleCustomer2030Ratio: 남성 2030대 고객 비중
-                    - maleCustomer40PlusRatio: 남성 40대 이상 고객 비중
-                    - returningCustomerRatio: 재방문 고객 비중
-                    - floatingPopulationRatio: 유동인구 고객 비중
-
-                    **매출 정보 (선택):**
-                    - deliverySalesRatio: 배달 매출 비율 (%, 0.0~100.0)
-                    - monthlyRevenue: 월 평균 매출액 (원)
-                    - dailyCustomerCount: 일일 고객 수 (명, 0~100000)
-
                     **참고:**
-                    - 남성 2030대 + 남성 40대 이상 비중의 합은 100% 이하여야 합니다.
-                    - 비율 데이터는 소수점 2자리까지 입력 가능합니다.
+                    - 매출 데이터(월별 매출, 재방문 고객 비율 등)는 별도 API로 등록합니다.
+                    - 이 API는 가게의 기본 정보만 등록합니다.
                     """
     )
     @ApiResponses(value = {
@@ -110,19 +100,13 @@ public class StoreController {
                                     name = "가게 정보 입력 예시",
                                     value = """
                                             {
+                                              "storeId": 1,
                                               "storeName": "맛있는 치킨집",
                                               "serviceIndustry": "CHICKEN",
                                               "gu": "성동구",
                                               "dong": "성수동",
                                               "openingDate": "2024-01-15",
-                                              "brandCode": 0,
-                                              "maleCustomer2030Ratio": 35.5,
-                                              "maleCustomer40PlusRatio": 25.0,
-                                              "returningCustomerRatio": 45.0,
-                                              "floatingPopulationRatio": 60.0,
-                                              "deliverySalesRatio": 70.0,
-                                              "monthlyRevenue": 15000000,
-                                              "dailyCustomerCount": 150
+                                              "brandCode": 0
                                             }
                                             """
                             )
