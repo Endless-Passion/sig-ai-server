@@ -1,10 +1,7 @@
-package com.endlesspassion.sigai.batch.reader;
+package com.endlesspassion.sigai.domain.batch.reader;
 
-import com.endlesspassion.sigai.batch.service.GetPublicDataService;
+import com.endlesspassion.sigai.domain.batch.service.GetPublicDataService;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.batch.item.NonTransientResourceException;
-import org.springframework.batch.item.ParseException;
-import org.springframework.batch.item.UnexpectedInputException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;

@@ -41,19 +41,26 @@ public class RevenueComparisonService {
     //경쟁강도 = 동일업종 점포수 / 상권 면적(면적 미존재 시 점포수 지표만)
 
     // 매출 비교 분석 함수
-    public RevenueComparison alalyze(
+    public RevenueComparison analyze(
             List<String> quarters,
             String trdarCd,
             String svcIndutyCd,
-            BigDecimal revenue
+            List<BigDecimal> revenues
     ) {
+        if (quarters.size() != revenues.size()) {
+            throw new IllegalArgumentException("분기 수와 매출 데이터 수가 일치하지 않습니다.");
+        }
+
         List<RevenueComparison.QuarterlyRevenueRank> quarterlyRanks = new ArrayList<>();
         Integer previousRank = null;
 
-        // 각 분기별로 순위 계산
-        for(String quarger : quarters) {
+        // 각 분기별로 순위 계산 (각 분기에 해당하는 매출 사용)
+        for(int i = 0; i < quarters.size(); i++) {
+            String quarter = quarters.get(i);
+            BigDecimal revenue = revenues.get(i);
+
             RevenueComparison.QuarterlyRevenueRank rank = calculateRankForQuarter(
-                    quarger, trdarCd, svcIndutyCd, revenue, previousRank);
+                    quarter, trdarCd, svcIndutyCd, revenue, previousRank);
             quarterlyRanks.add(rank);
             previousRank = rank.getRank();
         }

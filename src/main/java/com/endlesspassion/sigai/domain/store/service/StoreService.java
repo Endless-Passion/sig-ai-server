@@ -1,4 +1,4 @@
-package com.endlesspassion.sigai.domain.store;
+package com.endlesspassion.sigai.domain.store.service;
 
 import com.endlesspassion.sigai.domain.store.dto.request.StoreReq;
 import com.endlesspassion.sigai.domain.store.dto.respose.StoreRes;

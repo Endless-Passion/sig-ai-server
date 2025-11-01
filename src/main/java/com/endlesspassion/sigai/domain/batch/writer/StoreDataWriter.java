@@ -1,4 +1,4 @@
-package com.endlesspassion.sigai.batch.writer;
+package com.endlesspassion.sigai.domain.batch.writer;
 
 import com.endlesspassion.sigai.domain.publicdata.document.PublicStoreData;
 import lombok.extern.slf4j.Slf4j;
