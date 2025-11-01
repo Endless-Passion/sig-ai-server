@@ -43,7 +43,7 @@ public class StoreDataWriter extends AbstractPublicDataWriter<PublicStoreData> {
     /**
      * [성능 최적화] ObjectMapper를 사용해 객체를 Document로 한 번에 변환
      * - 기존: update.set() 14번 호출 (1,000개 처리 시 14,000번)
-     * - 개선: Update.fromDocument() 1번 호출 (1,000개 처리 시 1,000번)
+     * - 개선: $set Document로 일괄 변환 (1,000개 처리 시 1,000번)
      * - 예상 성능: 1페이지(1,000건) 처리 시간 50초 → 10초 이내
      */
     @Override
@@ -55,7 +55,7 @@ public class StoreDataWriter extends AbstractPublicDataWriter<PublicStoreData> {
         doc.remove("_id");
         doc.remove("id");
 
-        // Document 전체를 Update 객체로 변환
-        return Update.fromDocument(doc);
+        // $set 연산자로 감싸서 Update 객체로 변환
+        return Update.fromDocument(new Document("$set", doc));
     }
 }
