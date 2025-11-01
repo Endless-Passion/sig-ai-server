@@ -8,6 +8,9 @@ services:
       - SPRING_PROFILES_ACTIVE=prod
     env_file:
       - .env.prod
+    dns:
+      - 8.8.8.8
+      - 8.8.4.4
     restart: unless-stopped
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:8080/actuator/health"]

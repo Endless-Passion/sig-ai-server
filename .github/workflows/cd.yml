@@ -91,8 +91,11 @@ jobs:
             # 환경변수 설정
             export DOCKER_USERNAME=${{ secrets.DOCKER_USERNAME }}
 
-            # 앱 서비스만 재시작
-            sudo -E docker-compose -f docker-compose.prod.yml up -d --no-deps app
+            # 기존 컨테이너 정리
+            sudo -E docker-compose -f docker-compose.prod.yml down || true
+
+            # 앱 서비스 실행
+            sudo -E docker-compose -f docker-compose.prod.yml up -d
 
             # Health check (최대 60초 대기)
             echo "Health check 시작..."
