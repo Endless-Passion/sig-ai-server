@@ -17,4 +17,12 @@ public interface StoreRevenueRepository extends JpaRepository<StoreRevenue, Long
      * @return 매출 데이터 리스트 (최신순)
      */
     List<StoreRevenue> findByStoreOrderByYearDescMonthDesc(Store store);
+
+    /**
+     * [수정] 특정 가게의 가장 최신 매출 데이터 1건을 조회
+     *
+     * @param store 조회할 가게
+     * @return 가장 최신 매출 데이터 (Optional)
+     */
+    Optional<StoreRevenue> findFirstByStoreOrderByYearDescMonthDesc(Store store);
 }
