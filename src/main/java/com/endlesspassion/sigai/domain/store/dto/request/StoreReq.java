@@ -1,6 +1,8 @@
 package com.endlesspassion.sigai.domain.store.dto.request;
 
+import com.endlesspassion.sigai.domain.member.entity.Member;
 import com.endlesspassion.sigai.domain.store.entity.Store;
+import com.endlesspassion.sigai.global.common.enums.ServiceArea;
 import com.endlesspassion.sigai.global.common.enums.ServiceIndustry;
 import jakarta.validation.constraints.*;
 import lombok.*;
@@ -13,12 +15,12 @@ import java.time.LocalDate;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class StoreReq {
 
-    @NotBlank(message = "가게 Id는 필수.")
-    private Long storeId;
-
     @NotBlank(message = "가게 이름은 필수입니다.")
     @Size(max = 100, message = "가게 이름은 100자 이내로 입력해주세요.")
     private String storeName;
+
+    @NotNull(message = "상권은 필수입니다.")
+    private ServiceArea serviceArea;
 
     @NotNull(message = "업종은 필수입니다.")
     private ServiceIndustry serviceIndustry;
@@ -43,9 +45,11 @@ public class StoreReq {
         return brandCode != null && brandCode == 1;
     }
 
-    public Store to() {
+    public Store to(Member member) {
         return Store.builder()
+                .member(member)
                 .storeName(this.storeName)
+                .serviceArea(this.serviceArea)
                 .serviceIndustry(this.serviceIndustry)
                 .gu(this.gu)
                 .dong(this.dong)
