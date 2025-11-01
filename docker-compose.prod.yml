@@ -1,8 +1,6 @@
 services:
   app:
-    build:
-      context: .
-      dockerfile: Dockerfile
+    image: ${DOCKER_USERNAME}/sig-ai-server:latest
     container_name: sigai-app
     ports:
       - "8080:8080"

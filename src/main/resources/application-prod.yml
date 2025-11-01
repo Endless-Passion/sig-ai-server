@@ -21,9 +21,11 @@ spring:
       ddl-auto: update  # prod에서는 validate 또는 none 사용
     properties:
       hibernate:
+        dialect: org.hibernate.dialect.MySQL8Dialect
         format_sql: false  # prod에서는 false
         show_sql: false    # prod에서는 false
     open-in-view: false
+    database-platform: org.hibernate.dialect.MySQL8Dialect
 
   # ----------------------------------------
   # Spring Batch 설정
